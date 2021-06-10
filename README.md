@@ -1,7 +1,7 @@
 goodb
 =====
 
-> A toy database system, written in Go without 3rd dependencies!
+> A toy database system, written in Go without third-party dependencies!
 
 ## Get started
 
