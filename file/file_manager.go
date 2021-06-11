@@ -13,9 +13,9 @@ type FileManager struct {
 	openFiles map[string]*os.File
 }
 
-func (fileMgr *FileManager) read(blockId *BlockId, page *Page) {
-	file := fileMgr.readFile(blockId.filename)
-	_, err := file.Seek(int64(blockId.number*fileMgr.blockSize), 0)
+func (fileMgr *FileManager) read(block *Block, page *Page) {
+	file := fileMgr.readFile(block.filename)
+	_, err := file.Seek(int64(block.number*fileMgr.blockSize), 0)
 	if err != nil {
 		panic(err)
 	}
@@ -25,9 +25,9 @@ func (fileMgr *FileManager) read(blockId *BlockId, page *Page) {
 	}
 }
 
-func (fileMgr *FileManager) write(blockId *BlockId, page *Page) {
-	file := fileMgr.readFile(blockId.filename)
-	_, err := file.WriteAt(page.buffer, int64(blockId.number*fileMgr.blockSize))
+func (fileMgr *FileManager) write(block *Block, page *Page) {
+	file := fileMgr.readFile(block.filename)
+	_, err := file.WriteAt(page.buffer, int64(block.number*fileMgr.blockSize))
 	if err != nil {
 		panic(err)
 	}

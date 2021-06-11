@@ -1,6 +1,6 @@
 package file
 
-type BlockId struct {
+type Block struct {
 	filename string
 	number int
 }
