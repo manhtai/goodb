@@ -13,8 +13,12 @@ type FileManager struct {
 	openFiles map[string]*os.File
 }
 
-func (fileMgr *FileManager) read(block *Block, page *Page) {
-	file := fileMgr.readFile(block.filename)
+func (fileMgr *FileManager) GetBlockSize() int {
+	return fileMgr.blockSize
+}
+
+func (fileMgr *FileManager) Read(block *Block, page *Page) {
+	file := fileMgr.getFile(block.filename)
 	_, err := file.Seek(int64(block.number*fileMgr.blockSize), 0)
 	if err != nil {
 		panic(err)
@@ -25,15 +29,27 @@ func (fileMgr *FileManager) read(block *Block, page *Page) {
 	}
 }
 
-func (fileMgr *FileManager) write(block *Block, page *Page) {
-	file := fileMgr.readFile(block.filename)
+func (fileMgr *FileManager) Write(block *Block, page *Page) {
+	file := fileMgr.getFile(block.filename)
 	_, err := file.WriteAt(page.buffer, int64(block.number*fileMgr.blockSize))
 	if err != nil {
 		panic(err)
 	}
 }
 
-func (fileMgr *FileManager) readFile(filename string) *os.File {
+func (fileMgr *FileManager) Append(filename string) *Block {
+	newBlockNumber := len(filename)
+	block := &Block{filename: filename, number: newBlockNumber}
+	b := make([]byte, fileMgr.blockSize)
+	file := fileMgr.getFile(block.filename)
+	_, err := file.WriteAt(b, int64(block.number * fileMgr.blockSize))
+	if err != nil {
+		panic(err)
+	}
+	return block
+}
+
+func (fileMgr *FileManager) getFile(filename string) *os.File {
 	file, ok := fileMgr.openFiles[filename]
 	if ok {
 		return file
