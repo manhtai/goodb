@@ -8,14 +8,18 @@ import (
 
 type FileManager struct {
 	dbDirectory string
-	blockSize int
-	isNew bool
-	openFiles map[string]*os.File
+	blockSize   int
+	isNew       bool
+	openFiles   map[string]*os.File
 }
 
-func (fileMgr *FileManager) read(blockId *BlockId, page *Page) {
-	file := fileMgr.readFile(blockId.filename)
-	_, err := file.Seek(int64(blockId.number*fileMgr.blockSize), 0)
+func (fileMgr *FileManager) GetBlockSize() int {
+	return fileMgr.blockSize
+}
+
+func (fileMgr *FileManager) Read(block *Block, page *Page) {
+	file := fileMgr.getFile(block.filename)
+	_, err := file.Seek(int64(block.number*fileMgr.blockSize), 0)
 	if err != nil {
 		panic(err)
 	}
@@ -25,15 +29,27 @@ func (fileMgr *FileManager) read(blockId *BlockId, page *Page) {
 	}
 }
 
-func (fileMgr *FileManager) write(blockId *BlockId, page *Page) {
-	file := fileMgr.readFile(blockId.filename)
-	_, err := file.WriteAt(page.buffer, int64(blockId.number*fileMgr.blockSize))
+func (fileMgr *FileManager) Write(block *Block, page *Page) {
+	file := fileMgr.getFile(block.filename)
+	_, err := file.WriteAt(page.buffer, int64(block.number*fileMgr.blockSize))
 	if err != nil {
 		panic(err)
 	}
 }
 
-func (fileMgr *FileManager) readFile(filename string) *os.File {
+func (fileMgr *FileManager) Append(filename string) *Block {
+	newBlockNumber := len(filename)
+	block := &Block{filename: filename, number: newBlockNumber}
+	b := make([]byte, fileMgr.blockSize)
+	file := fileMgr.getFile(block.filename)
+	_, err := file.WriteAt(b, int64(block.number*fileMgr.blockSize))
+	if err != nil {
+		panic(err)
+	}
+	return block
+}
+
+func (fileMgr *FileManager) getFile(filename string) *os.File {
 	file, ok := fileMgr.openFiles[filename]
 	if ok {
 		return file
