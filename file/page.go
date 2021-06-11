@@ -4,6 +4,10 @@ type Page struct {
 	buffer []byte
 }
 
+func NewPage(blockSize int) *Page {
+	return &Page{buffer: make([]byte, blockSize)}
+}
+
 func (p *Page) GetInt(offset int) int {
 	b := p.buffer[offset]
 	return int(b)

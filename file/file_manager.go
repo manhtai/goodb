@@ -8,9 +8,9 @@ import (
 
 type FileManager struct {
 	dbDirectory string
-	blockSize int
-	isNew bool
-	openFiles map[string]*os.File
+	blockSize   int
+	isNew       bool
+	openFiles   map[string]*os.File
 }
 
 func (fileMgr *FileManager) GetBlockSize() int {
@@ -42,7 +42,7 @@ func (fileMgr *FileManager) Append(filename string) *Block {
 	block := &Block{filename: filename, number: newBlockNumber}
 	b := make([]byte, fileMgr.blockSize)
 	file := fileMgr.getFile(block.filename)
-	_, err := file.WriteAt(b, int64(block.number * fileMgr.blockSize))
+	_, err := file.WriteAt(b, int64(block.number*fileMgr.blockSize))
 	if err != nil {
 		panic(err)
 	}

@@ -7,11 +7,11 @@ import (
 const INT_SIZE = 4
 
 type LogManager struct {
-	fileMgr *file.FileManager
-	logFile string
-	logPage *file.Page
+	fileMgr      *file.FileManager
+	logFile      string
+	logPage      *file.Page
 	currentBlock *file.Block
-	latestLSN int
+	latestLSN    int
 	lastSavedLSN int
 }
 
@@ -20,7 +20,7 @@ func (logMgr *LogManager) Append(logRecord []byte) {
 	recordSize := len(logRecord)
 	bytesNeeded := recordSize + INT_SIZE
 
-	if boundary - bytesNeeded < INT_SIZE {
+	if boundary-bytesNeeded < INT_SIZE {
 		logMgr.flush()
 		logMgr.currentBlock = logMgr.appendNewBlock()
 		boundary = logMgr.logPage.GetInt(0)
