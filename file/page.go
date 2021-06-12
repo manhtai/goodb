@@ -38,3 +38,8 @@ func (p *Page) GetString(offset int) string {
 	bytes := p.GetBytes(offset)
 	return string(bytes)
 }
+
+func (p *Page) SetString(offset int, s string) {
+	bytes := []byte(s)
+	p.SetBytes(offset, bytes)
+}

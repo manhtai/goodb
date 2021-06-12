@@ -23,6 +23,14 @@ func NewBuffer(fileMgr *file.FileManager, logMgr *log.LogManager) *Buffer {
 	}
 }
 
+func (buffer *Buffer) Contents() *file.Page {
+	return buffer.contents
+}
+
+func (buffer *Buffer) Block() *file.Block {
+	return buffer.block
+}
+
 func (buffer *Buffer) SetModified(txNum int, lsn int) {
 	buffer.txNum = txNum
 	if lsn >= 0 {
