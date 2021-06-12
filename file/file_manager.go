@@ -62,3 +62,12 @@ func (fileMgr *FileManager) getFile(filename string) *os.File {
 	fileMgr.openFiles[filename] = file
 	return file
 }
+
+func (fileMgr *FileManager) Length(filename string) int {
+	file := fileMgr.getFile(filename)
+	fi, err := file.Stat()
+	if err != nil {
+		panic(err)
+	}
+	return int(fi.Size())
+}

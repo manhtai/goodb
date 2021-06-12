@@ -15,7 +15,7 @@ type LogManager struct {
 	lastSavedLSN int
 }
 
-func (logMgr *LogManager) Append(logRecord []byte) {
+func (logMgr *LogManager) Append(logRecord []byte) int {
 	boundary := logMgr.logPage.GetInt(0)
 	recordSize := len(logRecord)
 	bytesNeeded := recordSize + INT_SIZE
@@ -30,6 +30,7 @@ func (logMgr *LogManager) Append(logRecord []byte) {
 	logMgr.logPage.SetBytes(recordPosition, logRecord)
 	logMgr.logPage.SetInt(0, recordPosition)
 	logMgr.latestLSN += 1
+	return logMgr.latestLSN
 }
 
 func (logMgr *LogManager) appendNewBlock() *file.Block {
