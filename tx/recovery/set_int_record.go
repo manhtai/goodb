@@ -52,24 +52,6 @@ func (r *SetIntRecord) undo(tx *tx.Transaction) {
 	tx.Unpin(r.block)
 }
 
-/*
-
-   int tpos = Integer.BYTES;
-   int fpos = tpos + Integer.BYTES;
-   int bpos = fpos + Page.maxLength(blk.fileName().length());
-   int opos = bpos + Integer.BYTES;
-   int vpos = opos + Integer.BYTES;
-   byte[] rec = new byte[vpos + Integer.BYTES];
-   Page p = new Page(rec);
-   p.setInt(0, SETINT);
-   p.setInt(tpos, txnum);
-   p.setString(fpos, blk.fileName());
-   p.setInt(bpos, blk.number());
-   p.setInt(opos, offset);
-   p.setInt(vpos, val);
-   return lm.append(rec);
- */
-
 func WriteSETINToLog(logMgr *log.LogManager, txNum int, block *file.Block, offset int, val int) int {
 	txPos := log.INT_SIZE
 	filePos := txPos + log.INT_SIZE
