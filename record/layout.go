@@ -8,6 +8,14 @@ type Layout struct {
 	slotSize int
 }
 
+func NewLayout(schema *Schema, offsets map[string]int, slotSize int) *Layout {
+	return &Layout{
+		schema: schema,
+		offsets: offsets,
+		slotSize: slotSize,
+	}
+}
+
 func NewLayoutFromSchema(schema *Schema) *Layout {
 	offsets := make(map[string]int)
 	pos := log.INT_SIZE
@@ -29,4 +37,8 @@ func (l *Layout) Schema() *Schema {
 
 func (l *Layout) Offset(field string) int {
 	return l.offsets[field]
+}
+
+func (l *Layout) SlotSize() int {
+	return l.slotSize
 }
