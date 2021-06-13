@@ -35,7 +35,7 @@ func (logMgr *LogManager) Append(logRecord []byte) int {
 
 func (logMgr *LogManager) appendNewBlock() *file.Block {
 	block := logMgr.fileMgr.Append(logMgr.logFile)
-	logMgr.logPage.SetInt(0, logMgr.fileMgr.GetBlockSize())
+	logMgr.logPage.SetInt(0, logMgr.fileMgr.BlockSize())
 	logMgr.fileMgr.Write(block, logMgr.logPage)
 	return block
 }

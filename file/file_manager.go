@@ -13,7 +13,7 @@ type FileManager struct {
 	openFiles   map[string]*os.File
 }
 
-func (fileMgr *FileManager) GetBlockSize() int {
+func (fileMgr *FileManager) BlockSize() int {
 	return fileMgr.blockSize
 }
 

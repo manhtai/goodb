@@ -19,7 +19,7 @@ func NewBuffer(fileMgr *file.FileManager, logMgr *log.LogManager) *Buffer {
 	return &Buffer{
 		fileMgr:  fileMgr,
 		logMgr:   logMgr,
-		contents: file.NewPage(fileMgr.GetBlockSize()),
+		contents: file.NewPage(fileMgr.BlockSize()),
 	}
 }
 

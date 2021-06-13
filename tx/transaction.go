@@ -111,3 +111,7 @@ func (tx *Transaction) Append(filename string) *file.Block {
 	tx.concurrencyMgr.XLock(dummyBlock)
 	return tx.fileMgr.Append(filename)
 }
+
+func (tx *Transaction) BlockSize() int {
+	return tx.fileMgr.BlockSize()
+}
