@@ -7,10 +7,10 @@ import (
 )
 
 type SetIntRecord struct {
-	txNum int
+	txNum  int
 	offset int
-	val int
-	block *file.Block
+	val    int
+	block  *file.Block
 }
 
 func NewSetIntRecord(page *file.Page) *SetIntRecord {
@@ -31,10 +31,10 @@ func NewSetIntRecord(page *file.Page) *SetIntRecord {
 	val := page.GetInt(pos)
 
 	return &SetIntRecord{
-		txNum: txNum,
+		txNum:  txNum,
 		offset: offset,
-		val: val,
-		block: block,
+		val:    val,
+		block:  block,
 	}
 }
 
@@ -59,7 +59,7 @@ func WriteSETINToLog(logMgr *log.LogManager, txNum int, block *file.Block, offse
 	offsetPos := blockPos + log.INT_SIZE
 	valuePos := offsetPos + log.INT_SIZE
 
-	record := make([]byte, valuePos + log.INT_SIZE)
+	record := make([]byte, valuePos+log.INT_SIZE)
 	page := file.NewPageFromBytes(record)
 	page.SetInt(0, SETINT)
 	page.SetInt(txPos, txNum)

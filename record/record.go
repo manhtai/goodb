@@ -2,13 +2,13 @@ package record
 
 type Record struct {
 	blockNumber int
-	slot int
+	slot        int
 }
 
 func NewRecord(blockNumber int, slot int) *Record {
 	return &Record{
 		blockNumber: blockNumber,
-		slot: slot,
+		slot:        slot,
 	}
 }
 

@@ -3,8 +3,8 @@ package record
 import "goodb/log"
 
 type Layout struct {
-	schema *Schema
-	offsets map[string]int
+	schema   *Schema
+	offsets  map[string]int
 	slotSize int
 }
 
@@ -17,8 +17,8 @@ func NewLayoutFromSchema(schema *Schema) *Layout {
 	}
 
 	return &Layout{
-		schema: schema,
-		offsets: offsets,
+		schema:   schema,
+		offsets:  offsets,
 		slotSize: pos,
 	}
 }

@@ -11,24 +11,24 @@ import (
 const END_OF_FILE = -1
 
 type Transaction struct {
-	recoveryMgr *recovery.RecoveryManager
+	recoveryMgr    *recovery.RecoveryManager
 	concurrencyMgr *concurrency.ConcurrencyManager
-	bufferMgr *buffer.BufferManager
-	fileMgr *file.FileManager
-	buffers *BufferList
-	nextTxNum int
-	txNum int
+	bufferMgr      *buffer.BufferManager
+	fileMgr        *file.FileManager
+	buffers        *BufferList
+	nextTxNum      int
+	txNum          int
 }
 
 func (tx *Transaction) Commit() {
-	tx.recoveryMgr.Commit();
+	tx.recoveryMgr.Commit()
 	fmt.Printf("Transaction %d committed", tx.txNum)
 	tx.concurrencyMgr.Release()
 	tx.buffers.unpinAll()
 }
 
 func (tx *Transaction) Rollback() {
-	tx.recoveryMgr.Rollback();
+	tx.recoveryMgr.Rollback()
 	fmt.Printf("Transaction %d rolled back", tx.txNum)
 	tx.concurrencyMgr.Release()
 	tx.buffers.unpinAll()

@@ -7,10 +7,10 @@ import (
 )
 
 type SetStringRecord struct {
-	txNum int
+	txNum  int
 	offset int
-	val string
-	block *file.Block
+	val    string
+	block  *file.Block
 }
 
 func NewSetStringRecord(page *file.Page) *SetStringRecord {
@@ -31,10 +31,10 @@ func NewSetStringRecord(page *file.Page) *SetStringRecord {
 	val := page.GetString(pos)
 
 	return &SetStringRecord{
-		txNum: txNum,
+		txNum:  txNum,
 		offset: offset,
-		val: val,
-		block: block,
+		val:    val,
+		block:  block,
 	}
 }
 
@@ -59,7 +59,7 @@ func WriteSETSTRINGoLog(logMgr *log.LogManager, txNum int, block *file.Block, of
 	offsetPos := blockPos + log.INT_SIZE
 	valuePos := offsetPos + log.INT_SIZE
 
-	record := make([]byte, valuePos + log.INT_SIZE)
+	record := make([]byte, valuePos+log.INT_SIZE)
 	page := file.NewPageFromBytes(record)
 	page.SetInt(0, SETINT)
 	page.SetInt(txPos, txNum)

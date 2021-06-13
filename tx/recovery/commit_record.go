@@ -1,9 +1,9 @@
 package recovery
 
 import (
-"goodb/file"
-"goodb/log"
-"goodb/tx"
+	"goodb/file"
+	"goodb/log"
+	"goodb/tx"
 )
 
 type CommitRecord struct {

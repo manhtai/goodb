@@ -6,6 +6,6 @@ const (
 )
 
 type FieldInfo struct {
-	Type int
+	Type   int
 	Length int
 }

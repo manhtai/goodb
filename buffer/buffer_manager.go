@@ -47,7 +47,7 @@ func (bufferMgr *BufferManager) Unpin(buffer *Buffer) {
 func (bufferMgr *BufferManager) Pin(block *file.Block) *Buffer {
 	buffer := bufferMgr.tryToPin(block)
 	now := time.Now()
-	for ;buffer == nil && time.Since(now) < WAIT_TIME; {
+	for ; buffer == nil && time.Since(now) < WAIT_TIME; {
 		buffer = bufferMgr.tryToPin(block)
 		time.Sleep(time.Second)
 	}

@@ -21,10 +21,10 @@ func NewRecoveryManager(
 ) *RecoveryManager {
 	writeSTARTToLog(logMgr, txNum)
 	return &RecoveryManager{
-		logMgr: logMgr,
+		logMgr:    logMgr,
 		bufferMgr: bufferMgr,
-		tx: tx,
-		txNum: txNum,
+		tx:        tx,
+		txNum:     txNum,
 	}
 }
 

@@ -34,7 +34,6 @@ func (tableScan *TableScan) beforeFirst() {
 	tableScan.moveToBlock(0)
 }
 
-
 func (tableScan *TableScan) next() bool {
 	rp := tableScan.recordPage
 	for sl := rp.NextAfter(tableScan.currentSlot); sl < 0; sl = rp.NextAfter(sl) {
@@ -74,7 +73,7 @@ func (tableScan *TableScan) setString(fieldName string, val string) {
 
 func (tableScan *TableScan) insert() {
 	rp := tableScan.recordPage
-	for sl := rp.InsertAfter(tableScan.currentSlot) ; sl < 0; sl = rp.InsertAfter(sl) {
+	for sl := rp.InsertAfter(tableScan.currentSlot); sl < 0; sl = rp.InsertAfter(sl) {
 		if tableScan.atLastBlock() {
 			tableScan.moveToNewBlock()
 		} else {
@@ -98,7 +97,7 @@ func (tableScan *TableScan) moveToRecord(rcrd *record.Record) {
 	tableScan.close()
 	block := file.NewBlock(tableScan.filename, rcrd.BlockNumber())
 
-	tableScan.recordPage = record.NewRecordPage(tableScan.tx, block , tableScan.layout)
+	tableScan.recordPage = record.NewRecordPage(tableScan.tx, block, tableScan.layout)
 	tableScan.currentSlot = rcrd.Slot()
 }
 

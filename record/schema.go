@@ -2,7 +2,7 @@ package record
 
 type Schema struct {
 	fields []string
-	info map[string]*FieldInfo
+	info   map[string]*FieldInfo
 }
 
 func (s *Schema) AddField(field string, fType int, fLength int) {
