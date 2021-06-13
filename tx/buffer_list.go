@@ -43,8 +43,7 @@ func (bl *BufferList) findPinIndex(block *file.Block) int {
 }
 
 func (bl *BufferList) unpinAll() {
-	for i := 0; i < len(bl.pins); i++ {
-		blk := bl.pins[i]
+	for _, blk := range bl.pins {
 		buff := bl.buffers[blk]
 		bl.bufferMgr.Unpin(buff)
 	}
