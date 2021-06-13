@@ -25,6 +25,10 @@ func NewRecordPage(tx *tx.Transaction, block *file.Block, layout *Layout) *Recor
 	}
 }
 
+func (recordPage *RecordPage) Block() *file.Block {
+	return recordPage.block
+}
+
 func (recordPage *RecordPage) Format() {
 	slot := 0
 	for ; recordPage.isValidSlot(slot); slot++ {
