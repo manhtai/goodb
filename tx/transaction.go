@@ -6,8 +6,6 @@ import (
 	"goodb/file"
 	"goodb/tx/concurrency"
 	"goodb/tx/recovery"
-	"strconv"
-	"strings"
 )
 
 const END_OF_FILE = -1
@@ -24,26 +22,14 @@ type Transaction struct {
 
 func (tx *Transaction) Commit() {
 	tx.recoveryMgr.Commit();
-
-	var msg strings.Builder
-	msg.WriteString("Transaction ")
-	msg.WriteString(strconv.Itoa(tx.txNum))
-	msg.WriteString("committed")
-	fmt.Println(msg.String())
-
+	fmt.Printf("Transaction %d committed", tx.txNum)
 	tx.concurrencyMgr.Release()
 	tx.buffers.unpinAll()
 }
 
 func (tx *Transaction) Rollback() {
 	tx.recoveryMgr.Rollback();
-
-	var msg strings.Builder
-	msg.WriteString("Transaction ")
-	msg.WriteString(strconv.Itoa(tx.txNum))
-	msg.WriteString("rolled back")
-	fmt.Println(msg.String())
-
+	fmt.Printf("Transaction %d rolled back", tx.txNum)
 	tx.concurrencyMgr.Release()
 	tx.buffers.unpinAll()
 }

@@ -25,60 +25,76 @@ func NewRecordPage(tx *tx.Transaction, block *file.Block, layout *Layout) *Recor
 	}
 }
 
-func (rp *RecordPage) GetInt(slot int, fieldName string) int {
-	fieldPos := rp.offset(slot) + rp.layout.Offset(fieldName)
-	return rp.tx.GetInt(rp.block, fieldPos)
+func (recordPage *RecordPage) Format() {
+	slot := 0
+	for ; recordPage.isValidSlot(slot); slot++ {
+		recordPage.tx.SetInt(recordPage.block, recordPage.offset(slot), EMPTY, false)
+		schema := recordPage.layout.Schema()
+		for _, fieldName := range schema.Fields() {
+			fieldPos := recordPage.offset(slot) + recordPage.layout.Offset(fieldName)
+			if schema.Type(fieldName) == INTEGER {
+				recordPage.tx.SetInt(recordPage.block, fieldPos, 0, false)
+			} else {
+				recordPage.tx.SetString(recordPage.block, fieldPos, "", false)
+			}
+		}
+	}
 }
 
-func (rp *RecordPage) GetString(slot int, fieldName string) string {
-	fieldPos := rp.offset(slot) + rp.layout.Offset(fieldName)
-	return rp.tx.GetString(rp.block, fieldPos)
+func (recordPage *RecordPage) GetInt(slot int, fieldName string) int {
+	fieldPos := recordPage.offset(slot) + recordPage.layout.Offset(fieldName)
+	return recordPage.tx.GetInt(recordPage.block, fieldPos)
 }
 
-func (rp *RecordPage) SetInt(slot int, fieldName string, val int) {
-	fieldPos := rp.offset(slot) + rp.layout.Offset(fieldName)
-	rp.tx.SetInt(rp.block, fieldPos, val, true)
+func (recordPage *RecordPage) GetString(slot int, fieldName string) string {
+	fieldPos := recordPage.offset(slot) + recordPage.layout.Offset(fieldName)
+	return recordPage.tx.GetString(recordPage.block, fieldPos)
 }
 
-func (rp *RecordPage) SetString(slot int, fieldName string, val string) {
-	fieldPos := rp.offset(slot) + rp.layout.Offset(fieldName)
-	rp.tx.SetString(rp.block, fieldPos, val, true)
+func (recordPage *RecordPage) SetInt(slot int, fieldName string, val int) {
+	fieldPos := recordPage.offset(slot) + recordPage.layout.Offset(fieldName)
+	recordPage.tx.SetInt(recordPage.block, fieldPos, val, true)
 }
 
-func (rp *RecordPage) Delete(slot int) {
-	rp.setFlag(slot, EMPTY)
+func (recordPage *RecordPage) SetString(slot int, fieldName string, val string) {
+	fieldPos := recordPage.offset(slot) + recordPage.layout.Offset(fieldName)
+	recordPage.tx.SetString(recordPage.block, fieldPos, val, true)
 }
 
-func (rp *RecordPage) NextAfter(slot int) int {
-	return rp.searchAfter(slot, USED)
+func (recordPage *RecordPage) Delete(slot int) {
+	recordPage.setFlag(slot, EMPTY)
 }
 
-func (rp *RecordPage) InsertAfter(slot int) int {
-	newSlot := rp.searchAfter(slot, EMPTY)
+func (recordPage *RecordPage) NextAfter(slot int) int {
+	return recordPage.searchAfter(slot, USED)
+}
+
+func (recordPage *RecordPage) InsertAfter(slot int) int {
+	newSlot := recordPage.searchAfter(slot, EMPTY)
 	if newSlot >= 0 {
-		rp.setFlag(slot, USED)
+		recordPage.setFlag(slot, USED)
 	}
 	return newSlot
 }
 
-func (rp *RecordPage) searchAfter(slot int, flag int) int {
+func (recordPage *RecordPage) searchAfter(slot int, flag int) int {
 	slot += 1
-	for ; rp.isValidSlot(slot); slot++ {
-		if rp.tx.GetInt(rp.block, rp.offset(slot)) == flag {
+	for ; recordPage.isValidSlot(slot); slot++ {
+		if recordPage.tx.GetInt(recordPage.block, recordPage.offset(slot)) == flag {
 			return slot
 		}
 	}
 	return -1
 }
 
-func (rp *RecordPage) isValidSlot(slot int) bool {
-	return rp.offset(slot) <= rp.tx.BlockSize()
+func (recordPage *RecordPage) isValidSlot(slot int) bool {
+	return recordPage.offset(slot) <= recordPage.tx.BlockSize()
 }
 
-func (rp *RecordPage) setFlag(slot int, flag int) {
-	rp.tx.SetInt(rp.block, rp.offset(slot), flag, true)
+func (recordPage *RecordPage) setFlag(slot int, flag int) {
+	recordPage.tx.SetInt(recordPage.block, recordPage.offset(slot), flag, true)
 }
 
-func (rp *RecordPage) offset(slot int) int {
-	return rp.layout.slotSize * slot
+func (recordPage *RecordPage) offset(slot int) int {
+	return recordPage.layout.slotSize * slot
 }
