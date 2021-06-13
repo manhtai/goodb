@@ -10,8 +10,8 @@ type Layout struct {
 
 func NewLayout(schema *Schema, offsets map[string]int, slotSize int) *Layout {
 	return &Layout{
-		schema: schema,
-		offsets: offsets,
+		schema:   schema,
+		offsets:  offsets,
 		slotSize: slotSize,
 	}
 }
