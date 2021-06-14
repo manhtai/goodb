@@ -14,7 +14,7 @@ func (s *SelectScan) BeforeFirst() {
 }
 
 func (s *SelectScan) Next() bool {
-	for ; s.Next() ; {
+	for ; s.scan.Next() ; {
 		if s.pred.IsSatisfied(s) {
 			return true
 		}
@@ -23,23 +23,23 @@ func (s *SelectScan) Next() bool {
 }
 
 func (s *SelectScan) GetInt(fieldName string) int {
-	return s.GetInt(fieldName)
+	return s.scan.GetInt(fieldName)
 }
 
 func (s *SelectScan) GetString(fieldName string) string {
-	return s.GetString(fieldName)
+	return s.scan.GetString(fieldName)
 }
 
 func (s *SelectScan) GetVal(fieldName string) *Constant {
-	return s.GetVal(fieldName)
+	return s.scan.GetVal(fieldName)
 }
 
 func (s *SelectScan) HasField(fieldName string) bool {
-	return s.HasField(fieldName)
+	return s.scan.HasField(fieldName)
 }
 
 func (s *SelectScan) Close() {
-	s.Close()
+	s.scan.Close()
 }
 
 func (s *SelectScan) SetInt(fieldName string, val int) {
