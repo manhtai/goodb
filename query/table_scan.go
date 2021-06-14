@@ -34,7 +34,7 @@ func (tableScan *TableScan) beforeFirst() {
 	tableScan.moveToBlock(0)
 }
 
-func (tableScan *TableScan) next() bool {
+func (tableScan *TableScan) Next() bool {
 	rp := tableScan.recordPage
 	for sl := rp.NextAfter(tableScan.currentSlot); sl < 0; sl = rp.NextAfter(sl) {
 		if tableScan.atLastBlock() {
@@ -45,11 +45,11 @@ func (tableScan *TableScan) next() bool {
 	return true
 }
 
-func (tableScan *TableScan) getInt(fieldName string) int {
+func (tableScan *TableScan) GetInt(fieldName string) int {
 	return tableScan.recordPage.GetInt(tableScan.currentSlot, fieldName)
 }
 
-func (tableScan *TableScan) getString(fieldName string) string {
+func (tableScan *TableScan) GetString(fieldName string) string {
 	return tableScan.recordPage.GetString(tableScan.currentSlot, fieldName)
 }
 
@@ -57,21 +57,21 @@ func (tableScan *TableScan) hasField(fieldName string) bool {
 	return tableScan.layout.Schema().HasField(fieldName)
 }
 
-func (tableScan *TableScan) close() {
+func (tableScan *TableScan) Close() {
 	if tableScan.recordPage != nil {
 		tableScan.tx.Unpin(tableScan.recordPage.Block())
 	}
 }
 
-func (tableScan *TableScan) setInt(fieldName string, val int) {
+func (tableScan *TableScan) SetInt(fieldName string, val int) {
 	tableScan.recordPage.SetInt(tableScan.currentSlot, fieldName, val)
 }
 
-func (tableScan *TableScan) setString(fieldName string, val string) {
+func (tableScan *TableScan) SetString(fieldName string, val string) {
 	tableScan.recordPage.SetString(tableScan.currentSlot, fieldName, val)
 }
 
-func (tableScan *TableScan) insert() {
+func (tableScan *TableScan) Insert() {
 	rp := tableScan.recordPage
 	for sl := rp.InsertAfter(tableScan.currentSlot); sl < 0; sl = rp.InsertAfter(sl) {
 		if tableScan.atLastBlock() {
@@ -82,11 +82,11 @@ func (tableScan *TableScan) insert() {
 	}
 }
 
-func (tableScan *TableScan) delete() {
+func (tableScan *TableScan) Delete() {
 	tableScan.recordPage.Delete(tableScan.currentSlot)
 }
 
-func (tableScan *TableScan) getRecord() *record.Record {
+func (tableScan *TableScan) GetRecord() *record.Record {
 	return record.NewRecord(
 		tableScan.recordPage.Block().Number(),
 		tableScan.currentSlot,
@@ -94,7 +94,7 @@ func (tableScan *TableScan) getRecord() *record.Record {
 }
 
 func (tableScan *TableScan) moveToRecord(rcrd *record.Record) {
-	tableScan.close()
+	tableScan.Close()
 	block := file.NewBlock(tableScan.filename, rcrd.BlockNumber())
 
 	tableScan.recordPage = record.NewRecordPage(tableScan.tx, block, tableScan.layout)
@@ -102,7 +102,7 @@ func (tableScan *TableScan) moveToRecord(rcrd *record.Record) {
 }
 
 func (tableScan *TableScan) moveToNewBlock() {
-	tableScan.close()
+	tableScan.Close()
 	block := tableScan.tx.Append(tableScan.filename)
 	tableScan.recordPage = record.NewRecordPage(tableScan.tx, block, tableScan.layout)
 	tableScan.recordPage.Format()
@@ -110,7 +110,7 @@ func (tableScan *TableScan) moveToNewBlock() {
 }
 
 func (tableScan *TableScan) moveToBlock(blockNum int) {
-	tableScan.close()
+	tableScan.Close()
 	block := file.NewBlock(tableScan.filename, blockNum)
 	tableScan.recordPage = record.NewRecordPage(tableScan.tx, block, tableScan.layout)
 	tableScan.currentSlot = -1
