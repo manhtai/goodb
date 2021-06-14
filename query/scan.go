@@ -1,10 +1,11 @@
 package query
 
 type Scan interface {
-	beforeFirst()
-	next() bool
-	getInt(fieldName string) int
-	getString(fieldName string) string
-	hasField(fieldName string) bool
-	close()
+	BeforeFirst()
+	Next() bool
+	GetInt(fieldName string) int
+	GetString(fieldName string) string
+	HasField(fieldName string) bool
+	Close()
+	GetVal(fieldName string) *Constant
 }

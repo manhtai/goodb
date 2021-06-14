@@ -30,7 +30,7 @@ func NewTableScan(tx *tx.Transaction, tableName string, layout *record.Layout) *
 	return tableScan
 }
 
-func (tableScan *TableScan) beforeFirst() {
+func (tableScan *TableScan) BeforeFirst() {
 	tableScan.moveToBlock(0)
 }
 
@@ -53,7 +53,16 @@ func (tableScan *TableScan) GetString(fieldName string) string {
 	return tableScan.recordPage.GetString(tableScan.currentSlot, fieldName)
 }
 
-func (tableScan *TableScan) hasField(fieldName string) bool {
+func (tableScan *TableScan) GetVal(fieldName string) *Constant {
+	if tableScan.layout.Schema().Type(fieldName) == record.INTEGER {
+		intVal := tableScan.recordPage.GetInt(tableScan.currentSlot, fieldName)
+		return &Constant{intVal: intVal}
+	}
+	strVal := tableScan.recordPage.GetString(tableScan.currentSlot, fieldName)
+	return &Constant{strVal: strVal}
+}
+
+func (tableScan *TableScan) HasField(fieldName string) bool {
 	return tableScan.layout.Schema().HasField(fieldName)
 }
 
@@ -93,7 +102,7 @@ func (tableScan *TableScan) GetRecord() *record.Record {
 	)
 }
 
-func (tableScan *TableScan) moveToRecord(rcrd *record.Record) {
+func (tableScan *TableScan) MoveToRecord(rcrd *record.Record) {
 	tableScan.Close()
 	block := file.NewBlock(tableScan.filename, rcrd.BlockNumber())
 

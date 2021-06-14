@@ -5,10 +5,10 @@ import "goodb/record"
 type UpdateScan interface {
 	Scan
 
-	setInt(fieldName string, val int)
-	setString(fieldName string, val string)
-	insert()
-	delete()
-	getRecord() *record.Record
-	moveToRecord()
+	SetInt(fieldName string, val int)
+	SetString(fieldName string, val string)
+	Insert()
+	Delete()
+	GetRecord() *record.Record
+	MoveToRecord(record *record.Record)
 }
