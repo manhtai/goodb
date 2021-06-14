@@ -49,11 +49,11 @@ func (indexMgr *IndexManager) getIndexInfo(tblName string, tx *tx.Transaction) m
 			tblLayout := indexMgr.tableMgr.getLayout(tblName, tx)
 			tblStat := indexMgr.statMgr.getStatInfo(tblName, tblLayout, tx)
 			indexInfo := &IndexInfo{
-				idxName: idxName,
-				fldName: fldName,
+				idxName:   idxName,
+				fldName:   fldName,
 				tblSchema: tblLayout.Schema(),
-				tx: tx,
-				statInfo: tblStat,
+				tx:        tx,
+				statInfo:  tblStat,
 			}
 			result[fldName] = indexInfo
 		}

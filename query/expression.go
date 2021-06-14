@@ -1,7 +1,7 @@
 package query
 
 type Expression struct {
-	val *Constant
+	val     *Constant
 	fldName string
 }
 

@@ -52,13 +52,13 @@ func (statMgr *StatManager) getTableStats(tblName string, layout *record.Layout,
 	numRecords := 0
 	numBlocks := 0
 	tblScan := query.NewTableScan(tx, tblName, layout)
-	for ; tblScan.Next() ; {
+	for ; tblScan.Next(); {
 		numRecords += 1
 		numBlocks = tblScan.GetRecord().BlockNumber() + 1
 	}
 	tblScan.Close()
 	return &StatInfo{
 		numRecords: numRecords,
-		numBlocks: numBlocks,
+		numBlocks:  numBlocks,
 	}
 }

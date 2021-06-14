@@ -1,13 +1,13 @@
 package query
 
 type Term struct {
-	left *Expression
+	left  *Expression
 	right *Expression
 }
 
 func NewTerm(left *Expression, right *Expression) *Term {
 	return &Term{
-		left: left,
+		left:  left,
 		right: right,
 	}
 }
