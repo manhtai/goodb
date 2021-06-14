@@ -102,12 +102,12 @@ func (tableScan *TableScan) GetRecord() *record.Record {
 	)
 }
 
-func (tableScan *TableScan) MoveToRecord(rcrd *record.Record) {
+func (tableScan *TableScan) MoveToRecord(rcd *record.Record) {
 	tableScan.Close()
-	block := file.NewBlock(tableScan.filename, rcrd.BlockNumber())
+	block := file.NewBlock(tableScan.filename, rcd.BlockNumber())
 
 	tableScan.recordPage = record.NewRecordPage(tableScan.tx, block, tableScan.layout)
-	tableScan.currentSlot = rcrd.Slot()
+	tableScan.currentSlot = rcd.Slot()
 }
 
 func (tableScan *TableScan) moveToNewBlock() {
