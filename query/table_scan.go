@@ -86,7 +86,7 @@ func (tableScan *TableScan) Delete() {
 	tableScan.recordPage.Delete(tableScan.currentSlot)
 }
 
-func (tableScan *TableScan) getRecord() *record.Record {
+func (tableScan *TableScan) GetRecord() *record.Record {
 	return record.NewRecord(
 		tableScan.recordPage.Block().Number(),
 		tableScan.currentSlot,
