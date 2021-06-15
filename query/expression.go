@@ -1,21 +1,21 @@
 package query
 
 type Expression struct {
-	val     *Constant
-	fldName string
+	value     *Constant
+	fieldName string
 }
 
 func (expr *Expression) Eval(scan Scan) *Constant {
-	if expr.val != nil {
-		return expr.val
+	if expr.value != nil {
+		return expr.value
 	}
-	return scan.GetVal(expr.fldName)
+	return scan.GetVal(expr.fieldName)
 }
 
 func (expr *Expression) IsFieldName() bool {
-	return expr.fldName != ""
+	return expr.fieldName != ""
 }
 
 func (expr *Expression) AsConstant() *Constant {
-	return expr.val
+	return expr.value
 }

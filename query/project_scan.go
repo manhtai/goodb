@@ -1,7 +1,7 @@
 package query
 
 type ProjectScan struct {
-	scan Scan
+	scan   Scan
 	fields []string
 }
 
