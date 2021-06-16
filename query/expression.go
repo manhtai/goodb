@@ -5,6 +5,18 @@ type Expression struct {
 	fieldName string
 }
 
+func NewFieldExpression(fieldName string) *Expression {
+	return &Expression{
+		fieldName: fieldName,
+	}
+}
+
+func NewConstantExpression(value *Constant) *Expression {
+	return &Expression{
+		value: value,
+	}
+}
+
 func (expr *Expression) Eval(scan Scan) *Constant {
 	if expr.value != nil {
 		return expr.value

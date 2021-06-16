@@ -14,7 +14,7 @@ const (
 	CreateViewKind
 	InsertKind
 	DeleteKind
-	ModifyKind
+	UpdateKind
 )
 
 type SelectStatement struct {
@@ -50,7 +50,7 @@ type DeleteStatement struct {
 	predicate *query.Predicate
 }
 
-type ModifyStatement struct {
+type UpdateStatement struct {
 	tableName  string
 	fields     []string
 	expression *query.Expression
@@ -64,7 +64,7 @@ type Statement struct {
 	CreateViewStatement  *CreateViewStatement
 	InsertStatement      *InsertStatement
 	DeleteStatement      *DeleteStatement
-	ModifyStatement      *ModifyStatement
+	UpdateStatement      *UpdateStatement
 	Kind                 AstKind
 }
 

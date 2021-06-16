@@ -37,6 +37,7 @@ const (
 	Identifier     = "IDENT"
 	IntConstant    = "INT"
 	StringConstant = "STRING"
+	EOF            = "EOF"
 )
 
 var keywords = map[string]TokenType{
