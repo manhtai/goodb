@@ -2,6 +2,8 @@ package parse
 
 import (
 	"fmt"
+	"goodb/query"
+	"strconv"
 )
 
 type Parser struct {
@@ -58,7 +60,64 @@ func (parser *Parser) parseStatement() *Statement {
 }
 
 func (parser *Parser) parseSelectStatement() *Statement {
-	panic("implement me")
+	var fields []string
+	for !parser.curTokenIs(FromKeyword) {
+		fields = append(fields, parser.curToken.Literal)
+		parser.nextToken()
+	}
+
+	parser.nextToken()
+
+	var tables []string
+	for !parser.curTokenIs(SemicolonSymbol) {
+		tables = append(fields, parser.curToken.Literal)
+		parser.nextToken()
+	}
+
+	predicate := &query.Predicate{}
+	if parser.curTokenIs(WhereKeyword) {
+		predicate = parser.parsePredicate()
+	}
+
+	stmt := &SelectStatement{
+		fields: fields,
+		tables: tables,
+		predicate: predicate,
+	}
+
+	return &Statement{
+		SelectStatement: stmt,
+		Kind: SelectKind,
+	}
+}
+
+func (parser *Parser) parsePredicate() *query.Predicate {
+	term := parser.parseTerm()
+	return query.NewPredicateFromTerm(term)
+}
+
+func (parser *Parser) parseTerm() *query.Term {
+	left := parser.parseExpression()
+	parser.nextToken()
+	right := parser.parseExpression()
+	return query.NewTerm(left, right)
+}
+
+func (parser *Parser) parseExpression() *query.Expression {
+	if parser.curTokenIs(Identifier) {
+		parser.nextToken()
+		return query.NewFieldExpression(parser.curToken.Literal)
+	}
+	parser.nextToken()
+	return query.NewConstantExpression(parseConstant(parser.curToken))
+}
+
+func parseConstant(token Token) *query.Constant {
+	if token.Type == StringConstant {
+		return query.NewStrConstant(token.Literal)
+	}
+	i, _ := strconv.Atoi(token.Literal)
+	return query.NewIntConstant(i)
 }
 
 func (parser *Parser) parseCreateTableStatement() *Statement {
