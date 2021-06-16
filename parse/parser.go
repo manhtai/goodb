@@ -3,6 +3,7 @@ package parse
 import (
 	"fmt"
 	"goodb/query"
+	"goodb/record"
 	"strconv"
 )
 
@@ -38,7 +39,8 @@ func (parser *Parser) parseStatement() *Statement {
 	case SelectKeyword:
 		return parser.parseSelectStatement()
 	case CreateKeyword:
-		switch parser.peekToken.Type {
+		parser.nextToken()
+		switch parser.curToken.Type {
 		case TableKeyword:
 			return parser.parseCreateTableStatement()
 		case ViewKeyword:
@@ -62,15 +64,17 @@ func (parser *Parser) parseStatement() *Statement {
 func (parser *Parser) parseSelectStatement() *Statement {
 	var fields []string
 	for !parser.curTokenIs(FromKeyword) {
-		fields = append(fields, parser.curToken.Literal)
+		if parser.curToken.Type == Identifier {
+			fields = append(fields, parser.curToken.Literal)
+		}
 		parser.nextToken()
 	}
 
-	parser.nextToken()
-
 	var tables []string
 	for !parser.curTokenIs(SemicolonSymbol) {
-		tables = append(fields, parser.curToken.Literal)
+		if parser.curToken.Type == Identifier {
+			tables = append(tables, parser.curToken.Literal)
+		}
 		parser.nextToken()
 	}
 
@@ -80,14 +84,14 @@ func (parser *Parser) parseSelectStatement() *Statement {
 	}
 
 	stmt := &SelectStatement{
-		fields: fields,
-		tables: tables,
+		fields:    fields,
+		tables:    tables,
 		predicate: predicate,
 	}
 
 	return &Statement{
 		SelectStatement: stmt,
-		Kind: SelectKind,
+		Kind:            SelectKind,
 	}
 }
 
@@ -121,7 +125,46 @@ func parseConstant(token Token) *query.Constant {
 }
 
 func (parser *Parser) parseCreateTableStatement() *Statement {
-	panic("implement me")
+	parser.nextToken()
+	tableName := parser.curToken.Literal
+	parser.nextToken() // (
+	schema := parser.parseFieldDefs()
+	parser.nextToken() // )
+	stmt := &CreateTableStatement{
+		tableName: tableName,
+		schema:    schema,
+	}
+	return &Statement{
+		CreateTableStatement: stmt,
+		Kind:                 CreateTableKind,
+	}
+}
+
+func (parser *Parser) parseFieldDefs() *record.Schema {
+	schema := parser.parseFieldDef()
+	if parser.peekToken.Type == CommaSymbol {
+		parser.nextToken()
+		schema.Add(parser.parseFieldDefs())
+	}
+	return schema
+}
+
+func (parser *Parser) parseFieldDef() *record.Schema {
+	fieldName := parser.curToken.Literal
+	schema := &record.Schema{}
+
+	if parser.peekToken.Type == IntKeyword {
+		parser.nextToken()
+		schema.AddIntField(fieldName)
+	} else {
+		parser.nextToken()  // varchar
+		parser.nextToken()  // (
+		parser.nextToken()  // length
+		fieldLength, _ := strconv.Atoi(parser.curToken.Literal)
+		parser.nextToken()  // )
+		schema.AddStringField(fieldName, fieldLength)
+	}
+	return schema
 }
 
 func (parser *Parser) parseCreateViewStatement() *Statement {
@@ -133,7 +176,39 @@ func (parser *Parser) parseCreateIndexStatement() *Statement {
 }
 
 func (parser *Parser) parseInsertStatement() *Statement {
-	panic("implement me")
+	parser.nextToken() // into
+	parser.nextToken() // table
+	tableName := parser.curToken.Literal
+	parser.nextToken() // (
+
+	var fields []string
+	for !parser.curTokenIs(RightParenSymbol) {
+		if parser.curToken.Type == Identifier {
+			fields = append(fields, parser.curToken.Literal)
+		}
+		parser.nextToken()
+	}
+
+	parser.nextToken() // values
+	parser.nextToken() // (
+
+	var values []*query.Constant
+	for !parser.curTokenIs(RightParenSymbol) {
+		if parser.curToken.Type == Identifier {
+			values = append(values, parseConstant(parser.curToken))
+		}
+		parser.nextToken()
+	}
+
+	stmt := &InsertStatement{
+		tableName: tableName,
+		fields: fields,
+		values: values,
+	}
+	return &Statement{
+		InsertStatement: stmt,
+		Kind: InsertKind,
+	}
 }
 
 func (parser *Parser) parseDeleteStatement() *Statement {
