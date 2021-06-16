@@ -1,47 +1,68 @@
 package parse
 
-type Keyword string
-
-const (
-	SelectKeyword Keyword = "select"
-	FromKeyword   Keyword = "from"
-	WhereKeyword  Keyword = "where"
-	AndKeyword    Keyword = "and"
-	InsertKeyword Keyword = "insert"
-	IntoKeyword   Keyword = "into"
-	ValuesKeyword Keyword = "values"
-	DeleteKeyword Keyword = "delete"
-	UpdateKeyword Keyword = "update"
-	SetKeyword    Keyword = "set"
-	TableKeyword  Keyword = "table"
-	CreateKeyword Keyword = "create"
-	IntKeyword    Keyword = "int"
-	TextKeyword   Keyword = "varchar"
-	ViewKeyword   Keyword = "view"
-	AsKeyword     Keyword = "as"
-	IndexKeyword  Keyword = "index"
-	OnKeyword     Keyword = "on"
-)
-
-type Symbol string
-
-const (
-	CommaSymbol      Symbol = ","
-	LeftParenSymbol  Symbol = "("
-	RightParenSymbol Symbol = ")"
-	EqSymbol         Symbol = "="
-)
-
-type TokenKind uint
-
-const (
-	KeywordKind TokenKind = iota
-	SymbolKind
-	IdentifierKind
-	ConstantKind
-)
+type TokenType string
 
 type Token struct {
-	Value string
-	Kind  TokenKind
+	Type    TokenType
+	Literal string
+}
+
+const (
+	SelectKeyword = "select"
+	FromKeyword   = "from"
+	WhereKeyword  = "where"
+	AndKeyword    = "and"
+	InsertKeyword = "insert"
+	IntoKeyword   = "into"
+	ValuesKeyword = "values"
+	DeleteKeyword = "delete"
+	UpdateKeyword = "update"
+	SetKeyword    = "set"
+	TableKeyword  = "table"
+	CreateKeyword = "create"
+	IntKeyword    = "int"
+	TextKeyword   = "varchar"
+	ViewKeyword   = "view"
+	AsKeyword     = "as"
+	IndexKeyword  = "index"
+	OnKeyword     = "on"
+
+	SemicolonSymbol  = ";"
+	CommaSymbol      = ","
+	LeftParenSymbol  = "("
+	RightParenSymbol = ")"
+	EqSymbol         = "="
+	IllegalSymbol    = "ILLEGAL"
+
+	Identifier     = "IDENT"
+	IntConstant    = "INT"
+	StringConstant = "STRING"
+)
+
+var keywords = map[string]TokenType{
+	"select":  SelectKeyword,
+	"from":    FromKeyword,
+	"where":   WhereKeyword,
+	"and":     AndKeyword,
+	"insert":  InsertKeyword,
+	"into":    IntoKeyword,
+	"values":  ValuesKeyword,
+	"delete":  DeleteKeyword,
+	"update":  UpdateKeyword,
+	"set":     SetKeyword,
+	"table":   TableKeyword,
+	"create":  CreateKeyword,
+	"int":     IntKeyword,
+	"varchar": TextKeyword,
+	"view":    ViewKeyword,
+	"as":      AsKeyword,
+	"index":   IndexKeyword,
+	"on":      OnKeyword,
+}
+
+func LookupIdent(ident string) TokenType {
+	if tok, ok := keywords[ident]; ok {
+		return tok
+	}
+	return Identifier
 }
