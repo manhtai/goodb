@@ -5,6 +5,12 @@ type Schema struct {
 	info   map[string]*FieldInfo
 }
 
+func (s *Schema) AddSchema(field string, schema *Schema) {
+	fType := schema.Type(field)
+	fLength := schema.Length(field)
+	s.AddField(field, fType, fLength)
+}
+
 func (s *Schema) AddField(field string, fType int, fLength int) {
 	s.fields = append(s.fields, field)
 	s.info[field] = &FieldInfo{Type: fType, Length: fLength}
@@ -33,4 +39,10 @@ func (s *Schema) Type(field string) int {
 
 func (s *Schema) Length(field string) int {
 	return s.info[field].Length
+}
+
+func (s *Schema) Add(schema *Schema) {
+	for _, field := range schema.fields {
+		s.AddSchema(field, schema)
+	}
 }
