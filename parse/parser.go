@@ -157,11 +157,11 @@ func (parser *Parser) parseFieldDef() *record.Schema {
 		parser.nextToken()
 		schema.AddIntField(fieldName)
 	} else {
-		parser.nextToken()  // varchar
-		parser.nextToken()  // (
-		parser.nextToken()  // length
+		parser.nextToken() // varchar
+		parser.nextToken() // (
+		parser.nextToken() // length
 		fieldLength, _ := strconv.Atoi(parser.curToken.Literal)
-		parser.nextToken()  // )
+		parser.nextToken() // )
 		schema.AddStringField(fieldName, fieldLength)
 	}
 	return schema
@@ -202,12 +202,12 @@ func (parser *Parser) parseInsertStatement() *Statement {
 
 	stmt := &InsertStatement{
 		tableName: tableName,
-		fields: fields,
-		values: values,
+		fields:    fields,
+		values:    values,
 	}
 	return &Statement{
 		InsertStatement: stmt,
-		Kind: InsertKind,
+		Kind:            InsertKind,
 	}
 }
 
