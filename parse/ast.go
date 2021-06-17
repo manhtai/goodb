@@ -18,43 +18,43 @@ const (
 )
 
 type SelectStatement struct {
-	fields    []string
-	tables    []string
-	predicate *query.Predicate
+	Fields    []string
+	Tables    []string
+	Predicate *query.Predicate
 }
 
 type CreateTableStatement struct {
-	tableName string
-	schema    *record.Schema
+	TableName string
+	Schema    *record.Schema
 }
 
 type CreateViewStatement struct {
-	viewName        string
-	selectStatement *SelectStatement
+	ViewName   string
+	SelectStmt *SelectStatement
 }
 
 type CreateIndexStatement struct {
-	indexName string
-	tableName string
-	fieldName string
+	IndexName string
+	TableName string
+	FieldName string
 }
 
 type InsertStatement struct {
-	tableName string
-	fields    []string
-	values    []*query.Constant
+	TableName string
+	Fields    []string
+	Values    []*query.Constant
 }
 
 type DeleteStatement struct {
-	tableName string
-	predicate *query.Predicate
+	TableName string
+	Predicate *query.Predicate
 }
 
 type UpdateStatement struct {
-	tableName  string
-	fields     []string
-	expression *query.Expression
-	predicate  *query.Predicate
+	TableName  string
+	Fields     []string
+	Expression *query.Expression
+	Predicate  *query.Predicate
 }
 
 type Statement struct {
