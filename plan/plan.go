@@ -12,6 +12,11 @@ type Plan interface {
 	Schema() record.Schema
 }
 
+type UpdatePlan interface {
+	Open() query.UpdateScan
+	Schema() record.Schema
+}
+
 type QueryPlanner interface {
 	CreatePlan(stmt *parse.SelectStatement, tx *tx.Transaction) *Plan
 }

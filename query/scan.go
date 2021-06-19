@@ -1,5 +1,7 @@
 package query
 
+import "goodb/record"
+
 type Scan interface {
 	BeforeFirst()
 	Next() bool
@@ -8,4 +10,16 @@ type Scan interface {
 	HasField(fieldName string) bool
 	Close()
 	GetVal(fieldName string) *Constant
+}
+
+type UpdateScan interface {
+	Scan
+
+	SetInt(fieldName string, val int)
+	SetString(fieldName string, val string)
+	SetVal(fieldName string, val *Constant)
+	Insert()
+	Delete()
+	GetRecord() *record.Record
+	MoveToRecord(record *record.Record)
 }

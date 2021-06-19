@@ -1,6 +1,7 @@
 package parse
 
 import (
+	"fmt"
 	"goodb/query"
 	"goodb/record"
 )
@@ -33,6 +34,7 @@ type CreateViewStatement struct {
 	SelectStmt *SelectStatement
 }
 
+
 type CreateIndexStatement struct {
 	IndexName string
 	TableName string
@@ -52,7 +54,7 @@ type DeleteStatement struct {
 
 type UpdateStatement struct {
 	TableName  string
-	Fields     []string
+	FieldName  string
 	Expression *query.Expression
 	Predicate  *query.Predicate
 }
@@ -70,4 +72,8 @@ type Statement struct {
 
 type Ast struct {
 	Statements []*Statement
+}
+
+func (stmt CreateViewStatement) ViewDef() string {
+	return fmt.Sprintf("%s", stmt.SelectStmt)
 }

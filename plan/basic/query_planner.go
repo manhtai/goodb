@@ -11,6 +11,12 @@ type BasicQueryPlanner struct {
 	metadataMgr *metadata.MetadataManager
 }
 
+func NewBasicQueryPlanner(metadataMgr *metadata.MetadataManager) *BasicUpdatePlanner {
+	return &BasicUpdatePlanner{
+		metadataMgr: metadataMgr,
+	}
+}
+
 func (planner *BasicQueryPlanner) CreatePlan(stmt *parse.SelectStatement, tx *tx.Transaction) *plan.Plan {
 	var plans []*plan.Plan
 	for _, tableName := range stmt.Tables {
@@ -20,7 +26,8 @@ func (planner *BasicQueryPlanner) CreatePlan(stmt *parse.SelectStatement, tx *tx
 			selectStmt := parser.ParseStatement()
 			plans = append(plans, planner.CreatePlan(selectStmt.SelectStatement, tx))
 		} else {
-			plans = append(plans, plan.NewTablePlan(tx, tableName, planner.metadataMgr))
+			tablePlan := plan.NewTablePlan(tx, tableName, planner.metadataMgr)
+			plans = append(plans, )
 		}
 	}
 

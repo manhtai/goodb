@@ -5,6 +5,13 @@ type ProjectScan struct {
 	fields []string
 }
 
+func NewProjectScan(scan Scan, fields []string) *ProjectScan {
+	return &ProjectScan{
+		scan: scan,
+		fields: fields,
+	}
+}
+
 func (p *ProjectScan) BeforeFirst() {
 	p.scan.BeforeFirst()
 }

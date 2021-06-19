@@ -1,12 +1,15 @@
 package query
 
-import (
-	"goodb/record"
-)
-
 type SelectScan struct {
-	scan UpdateScan
+	scan Scan
 	pred *Predicate
+}
+
+func NewSelectScan(scan *Scan, pred *Predicate) *SelectScan {
+	return &SelectScan{
+		scan: *scan,
+		pred: pred,
+	}
 }
 
 func (s *SelectScan) BeforeFirst() {
@@ -42,26 +45,3 @@ func (s *SelectScan) Close() {
 	s.scan.Close()
 }
 
-func (s *SelectScan) SetInt(fieldName string, val int) {
-	s.scan.SetInt(fieldName, val)
-}
-
-func (s *SelectScan) SetString(fieldName string, val string) {
-	s.scan.SetString(fieldName, val)
-}
-
-func (s *SelectScan) Insert() {
-	s.scan.Insert()
-}
-
-func (s *SelectScan) Delete() {
-	s.scan.Delete()
-}
-
-func (s *SelectScan) GetRecord() *record.Record {
-	return s.scan.GetRecord()
-}
-
-func (s *SelectScan) MoveToRecord(rcd *record.Record) {
-	s.scan.MoveToRecord(rcd)
-}
