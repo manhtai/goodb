@@ -14,7 +14,7 @@ const (
 	AndKeyword    = "and"
 	InsertKeyword = "insert"
 	IntoKeyword   = "into"
-	ValuesKeyword = "Values"
+	ValuesKeyword = "values"
 	DeleteKeyword = "delete"
 	UpdateKeyword = "update"
 	SetKeyword    = "set"
@@ -47,7 +47,7 @@ var keywords = map[string]TokenType{
 	"and":     AndKeyword,
 	"insert":  InsertKeyword,
 	"into":    IntoKeyword,
-	"Values":  ValuesKeyword,
+	"values":  ValuesKeyword,
 	"delete":  DeleteKeyword,
 	"update":  UpdateKeyword,
 	"set":     SetKeyword,
