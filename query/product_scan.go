@@ -5,6 +5,13 @@ type ProductScan struct {
 	scan2 Scan
 }
 
+func NewProductScan(scan1 Scan, scan2 Scan) *ProductScan {
+	return &ProductScan{
+		scan1: scan1,
+		scan2: scan2,
+	}
+}
+
 func (p *ProductScan) BeforeFirst() {
 	p.scan1.BeforeFirst()
 	p.scan1.Next()

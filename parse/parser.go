@@ -25,7 +25,7 @@ func (parser *Parser) parse() *Ast {
 	ast := &Ast{}
 	ast.Statements = []*Statement{}
 	for !parser.curTokenIs(EOF) {
-		stmt := parser.parseStatement()
+		stmt := parser.ParseStatement()
 		if stmt != nil {
 			ast.Statements = append(ast.Statements, stmt)
 		}
@@ -34,7 +34,7 @@ func (parser *Parser) parse() *Ast {
 	return ast
 }
 
-func (parser *Parser) parseStatement() *Statement {
+func (parser *Parser) ParseStatement() *Statement {
 	switch parser.curToken.Type {
 	case SelectKeyword:
 		return parser.parseSelectStatement()
@@ -84,9 +84,9 @@ func (parser *Parser) parseSelectStatement() *Statement {
 	}
 
 	stmt := &SelectStatement{
-		fields:    fields,
-		tables:    tables,
-		predicate: predicate,
+		Fields:    fields,
+		Tables:    tables,
+		Predicate: predicate,
 	}
 
 	return &Statement{
@@ -131,8 +131,8 @@ func (parser *Parser) parseCreateTableStatement() *Statement {
 	schema := parser.parseFieldDefs()
 	parser.nextToken() // )
 	stmt := &CreateTableStatement{
-		tableName: tableName,
-		schema:    schema,
+		TableName: tableName,
+		Schema:    schema,
 	}
 	return &Statement{
 		CreateTableStatement: stmt,
@@ -189,7 +189,7 @@ func (parser *Parser) parseInsertStatement() *Statement {
 		parser.nextToken()
 	}
 
-	parser.nextToken() // values
+	parser.nextToken() // Values
 	parser.nextToken() // (
 
 	var values []*query.Constant
@@ -201,9 +201,9 @@ func (parser *Parser) parseInsertStatement() *Statement {
 	}
 
 	stmt := &InsertStatement{
-		tableName: tableName,
-		fields:    fields,
-		values:    values,
+		TableName: tableName,
+		Fields:    fields,
+		Values:    values,
 	}
 	return &Statement{
 		InsertStatement: stmt,
