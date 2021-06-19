@@ -7,7 +7,7 @@ type ProjectScan struct {
 
 func NewProjectScan(scan Scan, fields []string) *ProjectScan {
 	return &ProjectScan{
-		scan: scan,
+		scan:   scan,
 		fields: fields,
 	}
 }

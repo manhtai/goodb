@@ -9,26 +9,30 @@ import (
 
 type TablePlan struct {
 	tableName string
-	tx *tx.Transaction
-	layout *record.Layout
-	stats *metadata.StatInfo
+	tx        *tx.Transaction
+	layout    *record.Layout
+	stats     *metadata.StatInfo
 }
 
-func NewTablePlan(tx *tx.Transaction, tableName string, metadataMgr *metadata.MetadataManager) *TablePlan {
+func NewTablePlan(tx *tx.Transaction, tableName string, metadataMgr *metadata.MetadataManager) UpdatePlan {
 	layout := metadataMgr.GetLayout(tableName, tx)
 	stats := metadataMgr.GetStatInfo(tableName, layout, tx)
-	return &TablePlan{
+	return TablePlan{
 		tableName: tableName,
-		tx: tx,
-		layout: layout,
-		stats: stats,
+		tx:        tx,
+		layout:    layout,
+		stats:     stats,
 	}
 }
 
-func (tp TablePlan) Open() *query.TableScan {
+func (tp TablePlan) OpenToUpdate() query.UpdateScan {
 	return query.NewTableScan(tp.tx, tp.tableName, tp.layout)
 }
 
-func (tp TablePlan) Schema() *record.Schema {
-	return tp.layout.Schema()
+func (tp TablePlan) Open() query.Scan {
+	return query.NewTableScan(tp.tx, tp.tableName, tp.layout)
+}
+
+func (tp TablePlan) Schema() record.Schema {
+	return *tp.layout.Schema()
 }

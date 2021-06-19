@@ -34,7 +34,6 @@ type CreateViewStatement struct {
 	SelectStmt *SelectStatement
 }
 
-
 type CreateIndexStatement struct {
 	IndexName string
 	TableName string

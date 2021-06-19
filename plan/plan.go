@@ -13,12 +13,13 @@ type Plan interface {
 }
 
 type UpdatePlan interface {
-	Open() query.UpdateScan
-	Schema() record.Schema
+	Plan
+
+	OpenToUpdate() query.UpdateScan
 }
 
 type QueryPlanner interface {
-	CreatePlan(stmt *parse.SelectStatement, tx *tx.Transaction) *Plan
+	CreatePlan(stmt *parse.SelectStatement, tx *tx.Transaction) Plan
 }
 
 type UpdatePlaner interface {

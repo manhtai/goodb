@@ -80,6 +80,14 @@ func (tableScan *TableScan) SetString(fieldName string, val string) {
 	tableScan.recordPage.SetString(tableScan.currentSlot, fieldName, val)
 }
 
+func (tableScan *TableScan) SetVal(fieldName string, val *Constant) {
+	if val.kind == StringKind {
+		tableScan.SetString(fieldName, val.strVal)
+	} else {
+		tableScan.SetInt(fieldName, val.intVal)
+	}
+}
+
 func (tableScan *TableScan) Insert() {
 	rp := tableScan.recordPage
 	for sl := rp.InsertAfter(tableScan.currentSlot); sl < 0; sl = rp.InsertAfter(sl) {

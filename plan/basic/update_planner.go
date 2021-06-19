@@ -7,7 +7,7 @@ import (
 	"goodb/tx"
 )
 
-type BasicUpdatePlanner struct{
+type BasicUpdatePlanner struct {
 	metadataMgr *metadata.MetadataManager
 }
 
@@ -19,22 +19,20 @@ func NewBasicUpdatePlanner(metadataMgr *metadata.MetadataManager) *BasicUpdatePl
 
 func (planner *BasicUpdatePlanner) ExecuteInsert(stmt *parse.InsertStatement, tx *tx.Transaction) int {
 	p := plan.NewTablePlan(tx, stmt.TableName, planner.metadataMgr)
-	modifyPlan := plan.NewModifyPlanFromPlan(*p)
-	modifyScan := modifyPlan.Open()
+	modifyScan := p.OpenToUpdate()
 
-	modifyScan.Insert();
+	modifyScan.Insert()
 	for i, fieldName := range stmt.Fields {
 		val := stmt.Values[i]
-		modifyScan.SetVal(fieldName, val);
+		modifyScan.SetVal(fieldName, val)
 	}
-	modifyScan.Close();
-	return 1;
+	modifyScan.Close()
+	return 1
 }
 
 func (planner *BasicUpdatePlanner) ExecuteUpdate(stmt *parse.UpdateStatement, tx *tx.Transaction) int {
 	p := plan.NewTablePlan(tx, stmt.TableName, planner.metadataMgr)
-	modifyPlan := plan.NewModifyPlan(*p, stmt.Predicate)
-	modifyScan := modifyPlan.Open()
+	modifyScan := p.OpenToUpdate()
 
 	var count int
 	for count = 0; modifyScan.Next(); count++ {
@@ -48,8 +46,7 @@ func (planner *BasicUpdatePlanner) ExecuteUpdate(stmt *parse.UpdateStatement, tx
 
 func (planner *BasicUpdatePlanner) ExecuteDelete(stmt *parse.DeleteStatement, tx *tx.Transaction) int {
 	p := plan.NewTablePlan(tx, stmt.TableName, planner.metadataMgr)
-	modifyPlan := plan.NewModifyPlan(*p, stmt.Predicate)
-	modifyScan := modifyPlan.Open()
+	modifyScan := p.OpenToUpdate()
 
 	var count int
 	for count = 0; modifyScan.Next(); count++ {
@@ -61,16 +58,16 @@ func (planner *BasicUpdatePlanner) ExecuteDelete(stmt *parse.DeleteStatement, tx
 }
 
 func (planner *BasicUpdatePlanner) ExecuteCreateTable(stmt *parse.CreateTableStatement, tx *tx.Transaction) int {
-	planner.metadataMgr.CreateTable(stmt.TableName, stmt.Schema, tx);
+	planner.metadataMgr.CreateTable(stmt.TableName, stmt.Schema, tx)
 	return 0
 }
 
 func (planner *BasicUpdatePlanner) ExecuteCreateView(stmt *parse.CreateViewStatement, tx *tx.Transaction) int {
-	planner.metadataMgr.CreateView(stmt.ViewName, stmt.ViewDef(), tx);
+	planner.metadataMgr.CreateView(stmt.ViewName, stmt.ViewDef(), tx)
 	return 0
 }
 
 func (planner *BasicUpdatePlanner) ExecuteCreateIndex(stmt *parse.CreateIndexStatement, tx *tx.Transaction) int {
-	planner.metadataMgr.CreateIndex(stmt.IndexName, stmt.TableName, stmt.FieldName, tx);
+	planner.metadataMgr.CreateIndex(stmt.IndexName, stmt.TableName, stmt.FieldName, tx)
 	return 0
 }

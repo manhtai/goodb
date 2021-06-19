@@ -10,7 +10,7 @@ const (
 type Constant struct {
 	intVal int
 	strVal string
-	kind ConstantKind
+	kind   ConstantKind
 }
 
 func NewIntConstant(val int) *Constant {

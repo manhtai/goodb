@@ -6,7 +6,7 @@ import (
 )
 
 type ProjectPlan struct {
-	p Plan
+	p      Plan
 	schema *record.Schema
 }
 
@@ -16,16 +16,16 @@ func NewProjectPlan(p Plan, fields []string) *ProjectPlan {
 		schema.AddSchema(fieldName, p.Schema())
 	}
 	return &ProjectPlan{
-		p: p,
+		p:      p,
 		schema: &schema,
 	}
 }
 
-func (pp *ProjectPlan) Open() *query.ProjectScan {
+func (pp *ProjectPlan) Open() query.Scan {
 	scan := pp.p.Open()
 	return query.NewProjectScan(scan, pp.schema.Fields())
 }
 
-func (pp *ProjectPlan) Schema() *record.Schema {
-	return pp.schema
+func (pp *ProjectPlan) Schema() record.Schema {
+	return *pp.schema
 }

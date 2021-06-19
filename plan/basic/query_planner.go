@@ -17,8 +17,8 @@ func NewBasicQueryPlanner(metadataMgr *metadata.MetadataManager) *BasicUpdatePla
 	}
 }
 
-func (planner *BasicQueryPlanner) CreatePlan(stmt *parse.SelectStatement, tx *tx.Transaction) *plan.Plan {
-	var plans []*plan.Plan
+func (planner *BasicQueryPlanner) CreatePlan(stmt *parse.SelectStatement, tx *tx.Transaction) plan.Plan {
+	var plans []plan.Plan
 	for _, tableName := range stmt.Tables {
 		viewDef := planner.metadataMgr.GetViewDef(tableName, tx)
 		if viewDef != "" {
@@ -27,7 +27,7 @@ func (planner *BasicQueryPlanner) CreatePlan(stmt *parse.SelectStatement, tx *tx
 			plans = append(plans, planner.CreatePlan(selectStmt.SelectStatement, tx))
 		} else {
 			tablePlan := plan.NewTablePlan(tx, tableName, planner.metadataMgr)
-			plans = append(plans, )
+			plans = append(plans, tablePlan)
 		}
 	}
 
