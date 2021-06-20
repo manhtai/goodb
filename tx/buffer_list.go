@@ -11,6 +11,12 @@ type BufferList struct {
 	bufferMgr *buffer.BufferManager
 }
 
+func NewBufferList(bufferMgr *buffer.BufferManager) *BufferList {
+	return &BufferList{
+		bufferMgr: bufferMgr,
+	}
+}
+
 func (bl *BufferList) getBuffer(block *file.Block) *buffer.Buffer {
 	return bl.buffers[block]
 }

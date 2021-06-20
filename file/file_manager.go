@@ -13,6 +13,24 @@ type FileManager struct {
 	openFiles   map[string]*os.File
 }
 
+func NewFileManager(dbDir string, blockSize int) *FileManager {
+	isNew := false
+	if _, err := os.Stat(dbDir); os.IsNotExist(err) {
+		isNew = true
+		err := os.Mkdir(dbDir, os.ModeDir)
+		if err != nil {
+			panic("create db directory failure")
+		}
+	}
+
+	return &FileManager{
+		dbDirectory: dbDir,
+		blockSize:   blockSize,
+		isNew:       isNew,
+		openFiles:   make(map[string]*os.File),
+	}
+}
+
 func (fileMgr *FileManager) BlockSize() int {
 	return fileMgr.blockSize
 }
@@ -70,4 +88,8 @@ func (fileMgr *FileManager) Length(filename string) int {
 		panic(err)
 	}
 	return int(fi.Size())
+}
+
+func (fileMgr *FileManager) IsNew() bool {
+	return fileMgr.isNew
 }
