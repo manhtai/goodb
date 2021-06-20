@@ -20,13 +20,13 @@ type UpdatePlaner interface {
 }
 
 type Planner struct {
-	queryPlanner QueryPlanner
+	queryPlanner  QueryPlanner
 	updatePlanner UpdatePlaner
 }
 
 func NewPlanner(query QueryPlanner, update UpdatePlaner) *Planner {
 	return &Planner{
-		queryPlanner: query,
+		queryPlanner:  query,
 		updatePlanner: update,
 	}
 }

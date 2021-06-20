@@ -9,7 +9,7 @@ import (
 type FileManager struct {
 	dbDirectory string
 	blockSize   int
-	isNew bool
+	isNew       bool
 	openFiles   map[string]*os.File
 }
 
@@ -25,9 +25,9 @@ func NewFileManager(dbDir string, blockSize int) *FileManager {
 
 	return &FileManager{
 		dbDirectory: dbDir,
-		blockSize: blockSize,
-		isNew: isNew,
-		openFiles: make(map[string]*os.File),
+		blockSize:   blockSize,
+		isNew:       isNew,
+		openFiles:   make(map[string]*os.File),
 	}
 }
 

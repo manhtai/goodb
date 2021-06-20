@@ -27,7 +27,7 @@ func Start(in io.Reader, out io.Writer) {
 	}
 
 	tx := db.NewTx()
-	planner := db.Planner();
+	planner := db.Planner()
 
 	for {
 		fmt.Printf(PROMPT)

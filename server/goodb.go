@@ -12,17 +12,17 @@ import (
 )
 
 const (
-	BLOCK_SIZE = 400
+	BLOCK_SIZE  = 400
 	BUFFER_SIZE = 8
-	LOG_FILE = "goodb.log"
+	LOG_FILE    = "goodb.log"
 )
 
 type GooDb struct {
-	fileMgr *file.FileManager
-	bufferMgr *buffer.BufferManager
-	logMgr *log.LogManager
+	fileMgr     *file.FileManager
+	bufferMgr   *buffer.BufferManager
+	logMgr      *log.LogManager
 	metadataMgr *metadata.MetadataManager
-	planner *plan.Planner
+	planner     *plan.Planner
 }
 
 func NewGooDb(dirName string) *GooDb {
@@ -30,9 +30,9 @@ func NewGooDb(dirName string) *GooDb {
 	logMgr := log.NewLogManager(fileMgr, LOG_FILE)
 	bufferMgr := buffer.NewBufferManager(fileMgr, logMgr, BUFFER_SIZE)
 	gooDb := &GooDb{
-		fileMgr: fileMgr,
+		fileMgr:   fileMgr,
 		bufferMgr: bufferMgr,
-		logMgr: logMgr,
+		logMgr:    logMgr,
 	}
 
 	transaction := tx.NewTransaction(fileMgr, logMgr, bufferMgr)

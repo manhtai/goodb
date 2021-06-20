@@ -23,7 +23,7 @@ type Transaction struct {
 
 func NewTransaction(fileMgr *file.FileManager, logMgr *log.LogManager, bufferMgr *buffer.BufferManager) *Transaction {
 	tx := &Transaction{
-		fileMgr: fileMgr,
+		fileMgr:   fileMgr,
 		bufferMgr: bufferMgr,
 	}
 	tx.txNum = tx.NextTxNum()

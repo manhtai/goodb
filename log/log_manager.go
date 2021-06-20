@@ -30,7 +30,7 @@ func NewLogManager(fileMgr *file.FileManager, logFile string) *LogManager {
 	if logSize == 0 {
 		currentBlock = logMgr.appendNewBlock()
 	} else {
-		currentBlock = file.NewBlock(logFile, logSize - 1)
+		currentBlock = file.NewBlock(logFile, logSize-1)
 		fileMgr.Read(currentBlock, logPage)
 	}
 
