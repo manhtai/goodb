@@ -31,15 +31,11 @@ func NewPlanner(query QueryPlanner, update UpdatePlaner) *Planner {
 	}
 }
 
-func (planner *Planner) CreateQueryPlan(queryStr string, tx *tx.Transaction) Plan {
-	parser := parse.NewParser(queryStr)
-	stmt := parser.ParseStatement()
-	return planner.queryPlanner.CreatePlan(stmt.SelectStatement, tx)
+func (planner *Planner) CreateQueryPlan(stmt *parse.SelectStatement, tx *tx.Transaction) Plan {
+	return planner.queryPlanner.CreatePlan(stmt, tx)
 }
 
-func (planner *Planner) ExecuteUpdatePlan(queryStr string, tx *tx.Transaction) int {
-	parser := parse.NewParser(queryStr)
-	stmt := parser.ParseStatement()
+func (planner *Planner) ExecuteUpdatePlan(stmt *parse.Statement, tx *tx.Transaction) int {
 	switch stmt.Kind {
 	case parse.InsertKind:
 		return planner.updatePlanner.ExecuteInsert(stmt.InsertStatement, tx)

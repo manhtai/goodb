@@ -56,3 +56,10 @@ func NewGooDb(dirName string) *GooDb {
 	return gooDb
 }
 
+func (db *GooDb) NewTx() *tx.Transaction {
+	return tx.NewTransaction(db.fileMgr, db.logMgr, db.bufferMgr)
+}
+
+func (db *GooDb) Planner() *plan.Planner {
+	return db.planner
+}
