@@ -144,7 +144,7 @@ func (parser *Parser) parseFieldDefs() *record.Schema {
 	schema := parser.parseFieldDef()
 	if parser.peekToken.Type == CommaSymbol {
 		parser.nextToken()
-		schema.Add(parser.parseFieldDefs())
+		schema.Add(*parser.parseFieldDefs())
 	}
 	return schema
 }

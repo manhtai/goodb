@@ -11,8 +11,8 @@ type BasicQueryPlanner struct {
 	metadataMgr *metadata.MetadataManager
 }
 
-func NewBasicQueryPlanner(metadataMgr *metadata.MetadataManager) *BasicUpdatePlanner {
-	return &BasicUpdatePlanner{
+func NewBasicQueryPlanner(metadataMgr *metadata.MetadataManager) *BasicQueryPlanner {
+	return &BasicQueryPlanner{
 		metadataMgr: metadataMgr,
 	}
 }

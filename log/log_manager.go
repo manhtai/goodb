@@ -15,6 +15,29 @@ type LogManager struct {
 	lastSavedLSN int
 }
 
+func NewLogManager(fileMgr *file.FileManager, logFile string) *LogManager {
+	bytes := make([]byte, fileMgr.BlockSize())
+	logPage := file.NewPageFromBytes(bytes)
+	logSize := fileMgr.Length(logFile)
+
+	logMgr := &LogManager{
+		fileMgr: fileMgr,
+		logFile: logFile,
+		logPage: logPage,
+	}
+
+	var currentBlock *file.Block
+	if logSize == 0 {
+		currentBlock = logMgr.appendNewBlock()
+	} else {
+		currentBlock = file.NewBlock(logFile, logSize - 1)
+		fileMgr.Read(currentBlock, logPage)
+	}
+
+	logMgr.currentBlock = currentBlock
+	return logMgr
+}
+
 func (logMgr *LogManager) Append(logRecord []byte) int {
 	boundary := logMgr.logPage.GetInt(0)
 	recordSize := len(logRecord)

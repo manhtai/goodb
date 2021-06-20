@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"goodb/buffer"
 	"goodb/file"
+	"goodb/log"
 	"goodb/tx/concurrency"
 	"goodb/tx/recovery"
 )
@@ -18,6 +19,18 @@ type Transaction struct {
 	buffers        *BufferList
 	nextTxNum      int
 	txNum          int
+}
+
+func NewTransaction(fileMgr *file.FileManager, logMgr *log.LogManager, bufferMgr *buffer.BufferManager) *Transaction {
+	tx := &Transaction{
+		fileMgr: fileMgr,
+		bufferMgr: bufferMgr,
+	}
+	tx.txNum = tx.NextTxNum()
+	tx.recoveryMgr = recovery.NewRecoveryManager(tx, tx.txNum, logMgr, bufferMgr)
+	tx.concurrencyMgr = &concurrency.ConcurrencyManager{}
+	tx.buffers = NewBufferList(bufferMgr)
+	return tx
 }
 
 func (tx *Transaction) Commit() {
@@ -100,4 +113,9 @@ func (tx *Transaction) Append(filename string) *file.Block {
 
 func (tx *Transaction) BlockSize() int {
 	return tx.fileMgr.BlockSize()
+}
+
+func (tx *Transaction) NextTxNum() int {
+	tx.nextTxNum++
+	return tx.nextTxNum
 }
