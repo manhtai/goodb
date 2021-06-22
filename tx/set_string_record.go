@@ -1,6 +1,7 @@
 package tx
 
 import (
+	"goodb/constant"
 	"goodb/file"
 	"goodb/log"
 )
@@ -13,20 +14,20 @@ type SetStringRecord struct {
 }
 
 func NewSetStringRecord(page *file.Page) *SetStringRecord {
-	pos := log.INT_SIZE
+	pos := constant.INT_SIZE
 	txNum := page.GetInt(pos)
 
-	pos += log.INT_SIZE
+	pos += constant.INT_SIZE
 	filename := page.GetString(pos)
 
 	pos += log.MaxLength(len(filename))
 	blockNum := page.GetInt(pos)
 	block := file.NewBlock(filename, blockNum)
 
-	pos += log.INT_SIZE
+	pos += constant.INT_SIZE
 	offset := page.GetInt(pos)
 
-	pos += log.INT_SIZE
+	pos += constant.INT_SIZE
 	val := page.GetString(pos)
 
 	return &SetStringRecord{
@@ -52,11 +53,11 @@ func (r *SetStringRecord) undo(tx *Transaction) {
 }
 
 func WriteSETSTRINGoLog(logMgr *log.LogManager, txNum int, block file.Block, offset int, val string) int {
-	txPos := log.INT_SIZE
-	filePos := txPos + log.INT_SIZE
+	txPos := constant.INT_SIZE
+	filePos := txPos + constant.INT_SIZE
 	blockPos := filePos + log.MaxLength(len(block.Filename()))
-	offsetPos := blockPos + log.INT_SIZE
-	valuePos := offsetPos + log.INT_SIZE
+	offsetPos := blockPos + constant.INT_SIZE
+	valuePos := offsetPos + constant.INT_SIZE
 
 	record := make([]byte, valuePos+log.MaxLength(len(val)))
 	page := file.NewPageFromBytes(record)

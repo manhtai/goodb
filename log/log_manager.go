@@ -1,10 +1,10 @@
 package log
 
 import (
+	"goodb/constant"
 	"goodb/file"
 )
 
-const INT_SIZE = 4
 
 type LogManager struct {
 	fileMgr      *file.FileManager
@@ -41,9 +41,9 @@ func NewLogManager(fileMgr *file.FileManager, logFile string) *LogManager {
 func (logMgr *LogManager) Append(logRecord []byte) int {
 	boundary := logMgr.logPage.GetInt(0)
 	recordSize := len(logRecord)
-	bytesNeeded := recordSize + INT_SIZE
+	bytesNeeded := recordSize + constant.INT_SIZE
 
-	if boundary-bytesNeeded < INT_SIZE {
+	if boundary-bytesNeeded < constant.INT_SIZE {
 		logMgr.flush()
 		logMgr.currentBlock = logMgr.appendNewBlock()
 		boundary = logMgr.logPage.GetInt(0)
@@ -75,5 +75,5 @@ func (logMgr *LogManager) flush() {
 }
 
 func MaxLength(strLen int) int {
-	return INT_SIZE + strLen*INT_SIZE
+	return constant.INT_SIZE + strLen*constant.INT_SIZE
 }

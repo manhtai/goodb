@@ -49,7 +49,7 @@ func (tableMgr *TableManager) createTable(tblName string, schema *record.Schema,
 	tblCatScan.SetInt("slotSize", layout.SlotSize())
 	tblCatScan.Close()
 
-	fldCatScan := query.NewTableScan(tx, "fldCat", tableMgr.tblCatLayout)
+	fldCatScan := query.NewTableScan(tx, "fldCat", tableMgr.fldCatLayout)
 	for _, fieldName := range schema.Fields() {
 		fldCatScan.Insert()
 		fldCatScan.SetString("tblName", tblName)

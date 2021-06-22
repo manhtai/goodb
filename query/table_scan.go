@@ -35,12 +35,13 @@ func (tableScan *TableScan) BeforeFirst() {
 }
 
 func (tableScan *TableScan) Next() bool {
-	rp := tableScan.recordPage
-	for sl := rp.NextAfter(tableScan.currentSlot); sl < 0; sl = rp.NextAfter(sl) {
+	tableScan.currentSlot = tableScan.recordPage.NextAfter(tableScan.currentSlot)
+	for tableScan.currentSlot < 0 {
 		if tableScan.atLastBlock() {
 			return false
 		}
 		tableScan.moveToBlock(tableScan.recordPage.Block().Number() + 1)
+		tableScan.currentSlot = tableScan.recordPage.NextAfter(tableScan.currentSlot)
 	}
 	return true
 }
@@ -89,15 +90,14 @@ func (tableScan *TableScan) SetVal(fieldName string, val *Constant) {
 }
 
 func (tableScan *TableScan) Insert() {
-	rp := tableScan.recordPage
-	tableScan.currentSlot = rp.InsertAfter(tableScan.currentSlot)
+	tableScan.currentSlot = tableScan.recordPage.InsertAfter(tableScan.currentSlot)
 	for tableScan.currentSlot < 0 {
 		if tableScan.atLastBlock() {
 			tableScan.moveToNewBlock()
 		} else {
-			tableScan.moveToBlock(rp.Block().Number() + 1)
+			tableScan.moveToBlock(tableScan.recordPage.Block().Number() + 1)
 		}
-		tableScan.currentSlot = rp.InsertAfter(tableScan.currentSlot)
+		tableScan.currentSlot = tableScan.recordPage.InsertAfter(tableScan.currentSlot)
 	}
 }
 

@@ -32,7 +32,8 @@ func (recordPage *RecordPage) Block() file.Block {
 func (recordPage *RecordPage) Format() {
 	slot := 0
 	for ; recordPage.isValidSlot(slot); slot++ {
-		recordPage.tx.SetInt(recordPage.block, recordPage.offset(slot), EMPTY, false)
+		offset := recordPage.offset(slot)
+		recordPage.tx.SetInt(recordPage.block, offset, EMPTY, false)
 		schema := recordPage.layout.Schema()
 		for _, fieldName := range schema.Fields() {
 			fieldPos := recordPage.offset(slot) + recordPage.layout.Offset(fieldName)

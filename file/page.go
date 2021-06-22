@@ -27,7 +27,7 @@ func (p *Page) SetInt(offset int, n int) {
 
 func (p *Page) GetBytes(offset int) []byte {
 	length := p.GetInt(offset)
-	bytes := p.buffer[offset : offset+length]
+	bytes := p.buffer[offset+1:offset+length+1]
 	return bytes
 }
 

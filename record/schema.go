@@ -1,6 +1,7 @@
 package record
 
 import (
+	"goodb/constant"
 	"goodb/log"
 )
 
@@ -61,7 +62,7 @@ func (s *Schema) Add(schema Schema) {
 func (s *Schema) LengthInBytes(field string) int {
 	switch s.Type(field) {
 	case INTEGER:
-		return log.INT_SIZE
+		return constant.INT_SIZE
 	default:
 		return log.MaxLength(s.Length(field))
 	}
