@@ -6,6 +6,8 @@ import (
 	"path"
 )
 
+const DB_DIR_PREFIX = ".data"
+
 type FileManager struct {
 	dbDirectory string
 	blockSize   int
@@ -14,17 +16,18 @@ type FileManager struct {
 }
 
 func NewFileManager(dbDir string, blockSize int) *FileManager {
+	dbDirectory := path.Join(DB_DIR_PREFIX, dbDir)
 	isNew := false
-	if _, err := os.Stat(dbDir); os.IsNotExist(err) {
+	if _, err := os.Stat(dbDirectory); os.IsNotExist(err) {
 		isNew = true
-		err := os.Mkdir(dbDir, os.ModeDir)
+		err := os.MkdirAll(dbDirectory, 0700)
 		if err != nil {
 			panic("create db directory failure")
 		}
 	}
 
 	return &FileManager{
-		dbDirectory: dbDir,
+		dbDirectory: dbDirectory,
 		blockSize:   blockSize,
 		isNew:       isNew,
 		openFiles:   make(map[string]*os.File),
@@ -73,7 +76,7 @@ func (fileMgr *FileManager) getFile(filename string) *os.File {
 		return file
 	}
 	filePath := path.Join(fileMgr.dbDirectory, filename)
-	file, err := os.OpenFile(filePath, os.O_RDWR|os.O_CREATE, os.ModeExclusive)
+	file, err := os.OpenFile(filePath, os.O_RDWR|os.O_CREATE, 0700)
 	if err != nil {
 		panic(err)
 	}

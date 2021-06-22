@@ -14,12 +14,12 @@ type TableManager struct {
 }
 
 func NewTableManager(isNew bool, tx *tx.Transaction) *TableManager {
-	tblCatSchema := &record.Schema{}
+	tblCatSchema := record.NewSchema()
 	tblCatSchema.AddStringField("tblName", MAX_NAME)
 	tblCatSchema.AddIntField("slotSize")
 	tblCatLayout := record.NewLayoutFromSchema(tblCatSchema)
 
-	fldCatSchema := &record.Schema{}
+	fldCatSchema := record.NewSchema()
 	fldCatSchema.AddStringField("tblName", MAX_NAME)
 	fldCatSchema.AddStringField("fldName", MAX_NAME)
 	fldCatSchema.AddIntField("type")

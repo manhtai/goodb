@@ -11,6 +11,12 @@ type LockTable struct {
 	locks map[*file.Block]int
 }
 
+func NewLockTable() *LockTable {
+	return &LockTable{
+		locks: make(map[*file.Block]int),
+	}
+}
+
 func (lt *LockTable) SLock(block *file.Block) {
 	now := time.Now()
 	for ; lt.hasXLock(block) && time.Since(now) < WAIT_TIME; {

@@ -7,6 +7,13 @@ type ConcurrencyManager struct {
 	locks     map[*file.Block]string
 }
 
+func NewConcurrencyManager() *ConcurrencyManager {
+	return &ConcurrencyManager{
+		lockTable: NewLockTable(),
+		locks: make(map[*file.Block]string),
+	}
+}
+
 func (conMgr *ConcurrencyManager) SLock(block *file.Block) {
 	if _, ok := conMgr.locks[block]; !ok {
 		conMgr.lockTable.SLock(block)

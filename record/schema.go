@@ -5,6 +5,13 @@ type Schema struct {
 	info   map[string]*FieldInfo
 }
 
+func NewSchema() *Schema {
+	return &Schema{
+		fields: make([]string, 0),
+		info:   make(map[string]*FieldInfo),
+	}
+}
+
 func (s *Schema) AddSchema(field string, schema Schema) {
 	fType := schema.Type(field)
 	fLength := schema.Length(field)

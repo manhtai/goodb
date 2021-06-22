@@ -26,7 +26,7 @@ func NewTransaction(fileMgr *file.FileManager, logMgr *log.LogManager, bufferMgr
 	}
 	tx.txNum = tx.NextTxNum()
 	tx.recoveryMgr = NewRecoveryManager(tx, tx.txNum, logMgr, bufferMgr)
-	tx.concurrencyMgr = &ConcurrencyManager{}
+	tx.concurrencyMgr = NewConcurrencyManager()
 	tx.buffers = NewBufferList(bufferMgr)
 	return tx
 }
