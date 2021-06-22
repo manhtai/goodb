@@ -21,7 +21,7 @@ func NewLayoutFromSchema(schema *Schema) *Layout {
 	pos := log.INT_SIZE
 	for _, field := range schema.fields {
 		offsets[field] = pos
-		pos += schema.Length(field)
+		pos += schema.LengthInBytes(field)
 	}
 
 	return &Layout{

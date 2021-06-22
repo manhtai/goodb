@@ -76,7 +76,7 @@ func (recordPage *RecordPage) NextAfter(slot int) int {
 func (recordPage *RecordPage) InsertAfter(slot int) int {
 	newSlot := recordPage.searchAfter(slot, EMPTY)
 	if newSlot >= 0 {
-		recordPage.setFlag(slot, USED)
+		recordPage.setFlag(newSlot, USED)
 	}
 	return newSlot
 }
@@ -92,7 +92,7 @@ func (recordPage *RecordPage) searchAfter(slot int, flag int) int {
 }
 
 func (recordPage *RecordPage) isValidSlot(slot int) bool {
-	return recordPage.offset(slot) <= recordPage.tx.BlockSize()
+	return recordPage.offset(slot + 1) <= recordPage.tx.BlockSize()
 }
 
 func (recordPage *RecordPage) setFlag(slot int, flag int) {

@@ -1,5 +1,9 @@
 package record
 
+import (
+	"goodb/log"
+)
+
 type Schema struct {
 	fields []string
 	info   map[string]*FieldInfo
@@ -51,5 +55,14 @@ func (s *Schema) Length(field string) int {
 func (s *Schema) Add(schema Schema) {
 	for _, field := range schema.fields {
 		s.AddSchema(field, schema)
+	}
+}
+
+func (s *Schema) LengthInBytes(field string) int {
+	switch s.Type(field) {
+	case INTEGER:
+		return log.INT_SIZE
+	default:
+		return log.MaxLength(s.Length(field))
 	}
 }

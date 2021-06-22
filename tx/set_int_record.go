@@ -19,7 +19,7 @@ func NewSetIntRecord(page *file.Page) *SetIntRecord {
 	pos += log.INT_SIZE
 	filename := page.GetString(pos)
 
-	pos += len(filename)
+	pos += log.MaxLength(len(filename))
 	blockNum := page.GetInt(pos)
 	block := file.NewBlock(filename, blockNum)
 
@@ -54,7 +54,7 @@ func (r *SetIntRecord) undo(tx *Transaction) {
 func WriteSETINToLog(logMgr *log.LogManager, txNum int, block *file.Block, offset int, val int) int {
 	txPos := log.INT_SIZE
 	filePos := txPos + log.INT_SIZE
-	blockPos := filePos + len(block.Filename())
+	blockPos := filePos + log.MaxLength(len(block.Filename()))
 	offsetPos := blockPos + log.INT_SIZE
 	valuePos := offsetPos + log.INT_SIZE
 

@@ -73,3 +73,8 @@ func (logMgr *LogManager) flush() {
 	logMgr.fileMgr.Write(logMgr.currentBlock, logMgr.logPage)
 	logMgr.lastSavedLSN = logMgr.latestLSN
 }
+
+
+func MaxLength(strLen int) int {
+	return INT_SIZE + strLen*INT_SIZE
+}

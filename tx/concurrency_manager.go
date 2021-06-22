@@ -10,7 +10,7 @@ type ConcurrencyManager struct {
 func NewConcurrencyManager() *ConcurrencyManager {
 	return &ConcurrencyManager{
 		lockTable: NewLockTable(),
-		locks: make(map[*file.Block]string),
+		locks:     make(map[*file.Block]string),
 	}
 }
 
