@@ -90,7 +90,7 @@ func (fileMgr *FileManager) Length(filename string) int {
 	if err != nil {
 		panic(err)
 	}
-	return int(fi.Size())
+	return int(fi.Size()) / fileMgr.blockSize
 }
 
 func (fileMgr *FileManager) IsNew() bool {

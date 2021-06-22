@@ -50,7 +50,7 @@ func (buffer *Buffer) assignToBlock(block *file.Block) {
 }
 
 func (buffer *Buffer) flush() {
-	if buffer.txNum >= 0 {
+	if buffer.txNum >= 0 && buffer.block != nil {
 		buffer.logMgr.Flush(buffer.lsn)
 		buffer.fileMgr.Write(buffer.block, buffer.contents)
 		buffer.txNum = -1

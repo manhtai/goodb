@@ -14,6 +14,8 @@ type BufferList struct {
 func NewBufferList(bufferMgr *buffer.BufferManager) *BufferList {
 	return &BufferList{
 		bufferMgr: bufferMgr,
+		buffers: make(map[*file.Block]*buffer.Buffer),
+		pins: make([]*file.Block, 1),
 	}
 }
 

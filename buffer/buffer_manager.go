@@ -76,7 +76,7 @@ func (bufferMgr *BufferManager) tryToPin(block *file.Block) *Buffer {
 func (bufferMgr *BufferManager) findExistingBuffer(block *file.Block) *Buffer {
 	for i := 0; i < bufferMgr.numAvailable; i++ {
 		buffer := bufferMgr.bufferPool[i]
-		if buffer.block != nil && buffer.block == block {
+		if buffer.block != nil && file.IsBlocksEq(buffer.block, block) {
 			return buffer
 		}
 	}
