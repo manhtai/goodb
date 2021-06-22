@@ -1,9 +1,8 @@
-package recovery
+package tx
 
 import (
 	"goodb/file"
 	"goodb/log"
-	"goodb/tx"
 )
 
 type CheckpointRecord struct {
@@ -17,7 +16,7 @@ func (r *CheckpointRecord) txNumber() int {
 	return -1
 }
 
-func (r *CheckpointRecord) undo(tx *tx.Transaction) {
+func (r *CheckpointRecord) undo(tx *Transaction) {
 }
 
 func writeCHECKPOINTToLog(logMgr *log.LogManager) int {

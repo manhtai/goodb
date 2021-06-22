@@ -1,14 +1,13 @@
-package recovery
+package tx
 
 import (
 	"goodb/file"
-	"goodb/tx"
 )
 
 type LogRecord interface {
 	op() int
 	txNumber() int
-	undo(tx *tx.Transaction)
+	undo(tx *Transaction)
 }
 
 const (

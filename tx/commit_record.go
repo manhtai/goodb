@@ -1,9 +1,8 @@
-package recovery
+package tx
 
 import (
 	"goodb/file"
 	"goodb/log"
-	"goodb/tx"
 )
 
 type CommitRecord struct {
@@ -23,7 +22,7 @@ func (r *CommitRecord) txNumber() int {
 	return r.txNum
 }
 
-func (r *CommitRecord) undo(tx *tx.Transaction) {
+func (r *CommitRecord) undo(tx *Transaction) {
 }
 
 func writeCOMMITToLog(logMgr *log.LogManager, txNum int) int {

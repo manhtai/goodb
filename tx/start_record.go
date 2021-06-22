@@ -1,9 +1,8 @@
-package recovery
+package tx
 
 import (
 	"goodb/file"
 	"goodb/log"
-	"goodb/tx"
 )
 
 type StartRecord struct {
@@ -23,7 +22,7 @@ func (r *StartRecord) txNumber() int {
 	return r.txNum
 }
 
-func (r *StartRecord) undo(tx *tx.Transaction) {
+func (r *StartRecord) undo(tx *Transaction) {
 }
 
 func writeSTARTToLog(logMgr *log.LogManager, txNum int) int {

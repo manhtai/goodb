@@ -1,9 +1,8 @@
-package recovery
+package tx
 
 import (
 	"goodb/file"
 	"goodb/log"
-	"goodb/tx"
 )
 
 type SetIntRecord struct {
@@ -46,7 +45,7 @@ func (r *SetIntRecord) txNumber() int {
 	return r.txNum
 }
 
-func (r *SetIntRecord) undo(tx *tx.Transaction) {
+func (r *SetIntRecord) undo(tx *Transaction) {
 	tx.Pin(r.block)
 	tx.SetInt(r.block, r.offset, r.val, false)
 	tx.Unpin(r.block)

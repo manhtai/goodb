@@ -5,15 +5,13 @@ import (
 	"goodb/buffer"
 	"goodb/file"
 	"goodb/log"
-	"goodb/tx/concurrency"
-	"goodb/tx/recovery"
 )
 
 const END_OF_FILE = -1
 
 type Transaction struct {
-	recoveryMgr    *recovery.RecoveryManager
-	concurrencyMgr *concurrency.ConcurrencyManager
+	recoveryMgr    *RecoveryManager
+	concurrencyMgr *ConcurrencyManager
 	bufferMgr      *buffer.BufferManager
 	fileMgr        *file.FileManager
 	buffers        *BufferList
@@ -27,8 +25,8 @@ func NewTransaction(fileMgr *file.FileManager, logMgr *log.LogManager, bufferMgr
 		bufferMgr: bufferMgr,
 	}
 	tx.txNum = tx.NextTxNum()
-	tx.recoveryMgr = recovery.NewRecoveryManager(tx, tx.txNum, logMgr, bufferMgr)
-	tx.concurrencyMgr = &concurrency.ConcurrencyManager{}
+	tx.recoveryMgr = NewRecoveryManager(tx, tx.txNum, logMgr, bufferMgr)
+	tx.concurrencyMgr = &ConcurrencyManager{}
 	tx.buffers = NewBufferList(bufferMgr)
 	return tx
 }

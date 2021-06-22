@@ -1,9 +1,8 @@
-package recovery
+package tx
 
 import (
 	"goodb/file"
 	"goodb/log"
-	"goodb/tx"
 )
 
 type RollbackRecord struct {
@@ -23,7 +22,7 @@ func (r *RollbackRecord) txNumber() int {
 	return r.txNum
 }
 
-func (r *RollbackRecord) undo(tx *tx.Transaction) {
+func (r *RollbackRecord) undo(tx *Transaction) {
 }
 
 func writeROLLBACKToLog(logMgr *log.LogManager, txNum int) int {

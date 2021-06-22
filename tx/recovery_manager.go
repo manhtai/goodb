@@ -1,20 +1,19 @@
-package recovery
+package tx
 
 import (
 	"goodb/buffer"
 	"goodb/log"
-	"goodb/tx"
 )
 
 type RecoveryManager struct {
 	logMgr    *log.LogManager
 	bufferMgr *buffer.BufferManager
-	tx        *tx.Transaction
+	tx        *Transaction
 	txNum     int
 }
 
 func NewRecoveryManager(
-	tx *tx.Transaction,
+	tx *Transaction,
 	txNum int,
 	logMgr *log.LogManager,
 	bufferMgr *buffer.BufferManager,
