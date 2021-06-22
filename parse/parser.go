@@ -16,9 +16,12 @@ type Parser struct {
 
 func NewParser(input string) *Parser {
 	lexer := NewLexer(input)
-	return &Parser{
+	p := &Parser{
 		lexer: lexer,
 	}
+	p.nextToken()
+	p.nextToken()
+	return p
 }
 
 func (parser *Parser) parse() *Ast {
@@ -141,21 +144,27 @@ func (parser *Parser) parseCreateTableStatement() *Statement {
 }
 
 func (parser *Parser) parseFieldDefs() *record.Schema {
+	parser.nextToken()
 	schema := parser.parseFieldDef()
-	if parser.peekToken.Type == CommaSymbol {
-		parser.nextToken()
-		schema.Add(*parser.parseFieldDefs())
+	for parser.peekToken.Type != RightParenSymbol {
+		if parser.curToken.Type == CommaSymbol {
+			parser.nextToken()
+			continue
+		}
+		fSchema := parser.parseFieldDef()
+		schema.Add(*fSchema)
 	}
 	return schema
 }
 
 func (parser *Parser) parseFieldDef() *record.Schema {
 	fieldName := parser.curToken.Literal
-	schema := &record.Schema{}
+	schema := record.NewSchema()
 
 	if parser.peekToken.Type == IntKeyword {
 		parser.nextToken()
 		schema.AddIntField(fieldName)
+		parser.nextToken()
 	} else {
 		parser.nextToken() // varchar
 		parser.nextToken() // (
