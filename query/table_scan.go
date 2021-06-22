@@ -90,12 +90,14 @@ func (tableScan *TableScan) SetVal(fieldName string, val *Constant) {
 
 func (tableScan *TableScan) Insert() {
 	rp := tableScan.recordPage
-	for sl := rp.InsertAfter(tableScan.currentSlot); sl < 0; sl = rp.InsertAfter(sl) {
+	tableScan.currentSlot = rp.InsertAfter(tableScan.currentSlot)
+	for tableScan.currentSlot < 0 {
 		if tableScan.atLastBlock() {
 			tableScan.moveToNewBlock()
 		} else {
 			tableScan.moveToBlock(rp.Block().Number() + 1)
 		}
+		tableScan.currentSlot = rp.InsertAfter(tableScan.currentSlot)
 	}
 }
 

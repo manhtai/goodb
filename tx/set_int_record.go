@@ -9,7 +9,7 @@ type SetIntRecord struct {
 	txNum  int
 	offset int
 	val    int
-	block  *file.Block
+	block  file.Block
 }
 
 func NewSetIntRecord(page *file.Page) *SetIntRecord {
@@ -51,7 +51,7 @@ func (r *SetIntRecord) undo(tx *Transaction) {
 	tx.Unpin(r.block)
 }
 
-func WriteSETINToLog(logMgr *log.LogManager, txNum int, block *file.Block, offset int, val int) int {
+func WriteSETINToLog(logMgr *log.LogManager, txNum int, block file.Block, offset int, val int) int {
 	txPos := log.INT_SIZE
 	filePos := txPos + log.INT_SIZE
 	blockPos := filePos + log.MaxLength(len(block.Filename()))

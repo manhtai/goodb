@@ -4,24 +4,24 @@ import "goodb/file"
 
 type ConcurrencyManager struct {
 	lockTable *LockTable
-	locks     map[*file.Block]string
+	locks     map[file.Block]string
 }
 
 func NewConcurrencyManager() *ConcurrencyManager {
 	return &ConcurrencyManager{
 		lockTable: NewLockTable(),
-		locks:     make(map[*file.Block]string),
+		locks:     make(map[file.Block]string),
 	}
 }
 
-func (conMgr *ConcurrencyManager) SLock(block *file.Block) {
+func (conMgr *ConcurrencyManager) SLock(block file.Block) {
 	if _, ok := conMgr.locks[block]; !ok {
 		conMgr.lockTable.SLock(block)
 		conMgr.locks[block] = "S"
 	}
 }
 
-func (conMgr *ConcurrencyManager) XLock(block *file.Block) {
+func (conMgr *ConcurrencyManager) XLock(block file.Block) {
 	if !conMgr.hasXLock(block) {
 		conMgr.SLock(block)
 		conMgr.lockTable.XLock(block)
@@ -36,7 +36,7 @@ func (conMgr *ConcurrencyManager) Release() {
 	}
 }
 
-func (conMgr *ConcurrencyManager) hasXLock(block *file.Block) bool {
+func (conMgr *ConcurrencyManager) hasXLock(block file.Block) bool {
 	lockType, ok := conMgr.locks[block]
 	return ok && lockType == "X"
 }

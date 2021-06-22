@@ -44,7 +44,7 @@ func (bufferMgr *BufferManager) Unpin(buffer *Buffer) {
 	}
 }
 
-func (bufferMgr *BufferManager) Pin(block *file.Block) *Buffer {
+func (bufferMgr *BufferManager) Pin(block file.Block) *Buffer {
 	buffer := bufferMgr.tryToPin(block)
 	now := time.Now()
 	for ; buffer == nil && time.Since(now) < WAIT_TIME; {
@@ -57,7 +57,7 @@ func (bufferMgr *BufferManager) Pin(block *file.Block) *Buffer {
 	return buffer
 }
 
-func (bufferMgr *BufferManager) tryToPin(block *file.Block) *Buffer {
+func (bufferMgr *BufferManager) tryToPin(block file.Block) *Buffer {
 	buffer := bufferMgr.findExistingBuffer(block)
 	if buffer == nil {
 		buffer = bufferMgr.chooseUnpinnedBuffer()
@@ -73,10 +73,10 @@ func (bufferMgr *BufferManager) tryToPin(block *file.Block) *Buffer {
 	return buffer
 }
 
-func (bufferMgr *BufferManager) findExistingBuffer(block *file.Block) *Buffer {
+func (bufferMgr *BufferManager) findExistingBuffer(block file.Block) *Buffer {
 	for i := 0; i < bufferMgr.numAvailable; i++ {
 		buffer := bufferMgr.bufferPool[i]
-		if buffer.block != nil && file.IsBlocksEq(buffer.block, block) {
+		if buffer.block == block {
 			return buffer
 		}
 	}

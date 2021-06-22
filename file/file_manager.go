@@ -38,7 +38,7 @@ func (fileMgr *FileManager) BlockSize() int {
 	return fileMgr.blockSize
 }
 
-func (fileMgr *FileManager) Read(block *Block, page *Page) {
+func (fileMgr *FileManager) Read(block Block, page *Page) {
 	file := fileMgr.getFile(block.filename)
 	_, err := file.Seek(int64(block.number*fileMgr.blockSize), 0)
 	if err != nil {
@@ -50,7 +50,7 @@ func (fileMgr *FileManager) Read(block *Block, page *Page) {
 	}
 }
 
-func (fileMgr *FileManager) Write(block *Block, page *Page) {
+func (fileMgr *FileManager) Write(block Block, page *Page) {
 	file := fileMgr.getFile(block.filename)
 	_, err := file.WriteAt(page.buffer, int64(block.number*fileMgr.blockSize))
 	if err != nil {
@@ -58,9 +58,9 @@ func (fileMgr *FileManager) Write(block *Block, page *Page) {
 	}
 }
 
-func (fileMgr *FileManager) Append(filename string) *Block {
+func (fileMgr *FileManager) Append(filename string) Block {
 	newBlockNumber := len(filename)
-	block := &Block{filename: filename, number: newBlockNumber}
+	block := Block{filename: filename, number: newBlockNumber}
 	b := make([]byte, fileMgr.blockSize)
 	file := fileMgr.getFile(block.filename)
 	_, err := file.WriteAt(b, int64(block.number*fileMgr.blockSize))

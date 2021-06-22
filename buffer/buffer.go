@@ -9,7 +9,7 @@ type Buffer struct {
 	fileMgr  *file.FileManager
 	logMgr   *log.LogManager
 	contents *file.Page
-	block    *file.Block
+	block    file.Block
 	pins     int
 	txNum    int
 	lsn      int
@@ -27,7 +27,7 @@ func (buffer *Buffer) Contents() *file.Page {
 	return buffer.contents
 }
 
-func (buffer *Buffer) Block() *file.Block {
+func (buffer *Buffer) Block() file.Block {
 	return buffer.block
 }
 
@@ -42,7 +42,7 @@ func (buffer *Buffer) IsPinned() bool {
 	return buffer.pins > 0
 }
 
-func (buffer *Buffer) assignToBlock(block *file.Block) {
+func (buffer *Buffer) assignToBlock(block file.Block) {
 	buffer.flush()
 	buffer.block = block
 	buffer.fileMgr.Read(block, buffer.contents)
@@ -50,7 +50,7 @@ func (buffer *Buffer) assignToBlock(block *file.Block) {
 }
 
 func (buffer *Buffer) flush() {
-	if buffer.txNum >= 0 && buffer.block != nil {
+	if buffer.txNum >= 0 && buffer.block.Filename() != "" {
 		buffer.logMgr.Flush(buffer.lsn)
 		buffer.fileMgr.Write(buffer.block, buffer.contents)
 		buffer.txNum = -1

@@ -10,7 +10,7 @@ type LogManager struct {
 	fileMgr      *file.FileManager
 	logFile      string
 	logPage      *file.Page
-	currentBlock *file.Block
+	currentBlock file.Block
 	latestLSN    int
 	lastSavedLSN int
 }
@@ -26,7 +26,7 @@ func NewLogManager(fileMgr *file.FileManager, logFile string) *LogManager {
 		logPage: logPage,
 	}
 
-	var currentBlock *file.Block
+	var currentBlock file.Block
 	if logSize == 0 {
 		currentBlock = logMgr.appendNewBlock()
 	} else {
@@ -56,7 +56,7 @@ func (logMgr *LogManager) Append(logRecord []byte) int {
 	return logMgr.latestLSN
 }
 
-func (logMgr *LogManager) appendNewBlock() *file.Block {
+func (logMgr *LogManager) appendNewBlock() file.Block {
 	block := logMgr.fileMgr.Append(logMgr.logFile)
 	logMgr.logPage.SetInt(0, logMgr.fileMgr.BlockSize())
 	logMgr.fileMgr.Write(block, logMgr.logPage)
@@ -73,7 +73,6 @@ func (logMgr *LogManager) flush() {
 	logMgr.fileMgr.Write(logMgr.currentBlock, logMgr.logPage)
 	logMgr.lastSavedLSN = logMgr.latestLSN
 }
-
 
 func MaxLength(strLen int) int {
 	return INT_SIZE + strLen*INT_SIZE

@@ -50,26 +50,26 @@ func (tx *Transaction) Recover() {
 	tx.recoveryMgr.Recover()
 }
 
-func (tx *Transaction) Pin(block *file.Block) {
+func (tx *Transaction) Pin(block file.Block) {
 	tx.buffers.pin(block)
 }
 
-func (tx *Transaction) Unpin(block *file.Block) {
+func (tx *Transaction) Unpin(block file.Block) {
 	tx.buffers.unpin(block)
 }
 
-func (tx *Transaction) GetInt(block *file.Block, offset int) int {
+func (tx *Transaction) GetInt(block file.Block, offset int) int {
 	tx.concurrencyMgr.SLock(block)
 	buff := tx.buffers.getBuffer(block)
 	return buff.Contents().GetInt(offset)
 }
-func (tx *Transaction) GetString(block *file.Block, offset int) string {
+func (tx *Transaction) GetString(block file.Block, offset int) string {
 	tx.concurrencyMgr.SLock(block)
 	buff := tx.buffers.getBuffer(block)
 	return buff.Contents().GetString(offset)
 }
 
-func (tx *Transaction) SetInt(block *file.Block, offset int, val int, okToLog bool) {
+func (tx *Transaction) SetInt(block file.Block, offset int, val int, okToLog bool) {
 	tx.concurrencyMgr.XLock(block)
 	buff := tx.buffers.getBuffer(block)
 
@@ -83,7 +83,7 @@ func (tx *Transaction) SetInt(block *file.Block, offset int, val int, okToLog bo
 	buff.SetModified(tx.txNum, lsn)
 }
 
-func (tx *Transaction) SetString(block *file.Block, offset int, val string, okToLog bool) {
+func (tx *Transaction) SetString(block file.Block, offset int, val string, okToLog bool) {
 	tx.concurrencyMgr.XLock(block)
 	buff := tx.buffers.getBuffer(block)
 
@@ -103,7 +103,7 @@ func (tx *Transaction) Size(filename string) int {
 	return tx.fileMgr.Length(filename)
 }
 
-func (tx *Transaction) Append(filename string) *file.Block {
+func (tx *Transaction) Append(filename string) file.Block {
 	dummyBlock := file.NewBlock(filename, END_OF_FILE)
 	tx.concurrencyMgr.XLock(dummyBlock)
 	return tx.fileMgr.Append(filename)

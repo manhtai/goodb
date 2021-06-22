@@ -6,30 +6,30 @@ import (
 )
 
 type BufferList struct {
-	buffers   map[*file.Block]*buffer.Buffer
-	pins      []*file.Block
+	buffers   map[file.Block]*buffer.Buffer
+	pins      []file.Block
 	bufferMgr *buffer.BufferManager
 }
 
 func NewBufferList(bufferMgr *buffer.BufferManager) *BufferList {
 	return &BufferList{
 		bufferMgr: bufferMgr,
-		buffers:   make(map[*file.Block]*buffer.Buffer),
-		pins:      make([]*file.Block, 1),
+		buffers:   make(map[file.Block]*buffer.Buffer),
+		pins:      make([]file.Block, 1),
 	}
 }
 
-func (bl *BufferList) getBuffer(block *file.Block) *buffer.Buffer {
+func (bl *BufferList) getBuffer(block file.Block) *buffer.Buffer {
 	return bl.buffers[block]
 }
 
-func (bl *BufferList) pin(block *file.Block) {
+func (bl *BufferList) pin(block file.Block) {
 	buff := bl.bufferMgr.Pin(block)
 	bl.buffers[block] = buff
 	bl.pins = append(bl.pins, block)
 }
 
-func (bl *BufferList) unpin(block *file.Block) {
+func (bl *BufferList) unpin(block file.Block) {
 	buff := bl.buffers[block]
 	bl.bufferMgr.Unpin(buff)
 
@@ -41,7 +41,7 @@ func (bl *BufferList) unpin(block *file.Block) {
 	}
 }
 
-func (bl *BufferList) findPinIndex(block *file.Block) int {
+func (bl *BufferList) findPinIndex(block file.Block) int {
 	for i := 0; i < len(bl.pins); i++ {
 		if bl.pins[i] == block {
 			return i
@@ -55,6 +55,6 @@ func (bl *BufferList) unpinAll() {
 		buff := bl.buffers[blk]
 		bl.bufferMgr.Unpin(buff)
 	}
-	bl.buffers = make(map[*file.Block]*buffer.Buffer)
+	bl.buffers = make(map[file.Block]*buffer.Buffer)
 	bl.pins = bl.pins[:0]
 }

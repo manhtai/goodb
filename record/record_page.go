@@ -12,11 +12,11 @@ const (
 
 type RecordPage struct {
 	tx     *tx.Transaction
-	block  *file.Block
+	block  file.Block
 	layout *Layout
 }
 
-func NewRecordPage(tx *tx.Transaction, block *file.Block, layout *Layout) *RecordPage {
+func NewRecordPage(tx *tx.Transaction, block file.Block, layout *Layout) *RecordPage {
 	tx.Pin(block)
 	return &RecordPage{
 		tx:     tx,
@@ -25,7 +25,7 @@ func NewRecordPage(tx *tx.Transaction, block *file.Block, layout *Layout) *Recor
 	}
 }
 
-func (recordPage *RecordPage) Block() *file.Block {
+func (recordPage *RecordPage) Block() file.Block {
 	return recordPage.block
 }
 
@@ -92,7 +92,7 @@ func (recordPage *RecordPage) searchAfter(slot int, flag int) int {
 }
 
 func (recordPage *RecordPage) isValidSlot(slot int) bool {
-	return recordPage.offset(slot + 1) <= recordPage.tx.BlockSize()
+	return recordPage.offset(slot+1) <= recordPage.tx.BlockSize()
 }
 
 func (recordPage *RecordPage) setFlag(slot int, flag int) {
