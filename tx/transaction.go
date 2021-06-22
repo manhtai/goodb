@@ -33,14 +33,14 @@ func NewTransaction(fileMgr *file.FileManager, logMgr *log.LogManager, bufferMgr
 
 func (tx *Transaction) Commit() {
 	tx.recoveryMgr.Commit()
-	fmt.Printf("Transaction %d committed", tx.txNum)
+	fmt.Printf("Transaction %d committed\n", tx.txNum)
 	tx.concurrencyMgr.Release()
 	tx.buffers.unpinAll()
 }
 
 func (tx *Transaction) Rollback() {
 	tx.recoveryMgr.Rollback()
-	fmt.Printf("Transaction %d rolled back", tx.txNum)
+	fmt.Printf("Transaction %d rolled back\n", tx.txNum)
 	tx.concurrencyMgr.Release()
 	tx.buffers.unpinAll()
 }
