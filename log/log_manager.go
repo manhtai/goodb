@@ -5,7 +5,6 @@ import (
 	"goodb/file"
 )
 
-
 type LogManager struct {
 	fileMgr      *file.FileManager
 	logFile      string

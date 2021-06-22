@@ -44,6 +44,7 @@ func (l *Lexer) NextToken() Token {
 		tok.Type = EOF
 	default:
 		if l.ch == '\'' {
+			l.readChar()
 			tok.Literal = l.readIdentifier()
 			tok.Type = StringConstant
 			l.readChar()

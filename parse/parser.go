@@ -74,7 +74,7 @@ func (parser *Parser) parseSelectStatement() *Statement {
 	}
 
 	var tables []string
-	for !parser.curTokenIs(SemicolonSymbol) {
+	for !parser.curTokenIs(EOF) {
 		if parser.curToken.Type == Identifier {
 			tables = append(tables, parser.curToken.Literal)
 		}
@@ -204,7 +204,7 @@ func (parser *Parser) parseInsertStatement() *Statement {
 
 	var values []*query.Constant
 	for !parser.curTokenIs(RightParenSymbol) {
-		if parser.curToken.Type == Identifier {
+		if parser.curToken.Type == StringConstant || parser.curToken.Type == IntConstant {
 			values = append(values, parseConstant(parser.curToken))
 		}
 		parser.nextToken()
