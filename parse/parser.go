@@ -200,6 +200,7 @@ func (parser *Parser) parseInsertStatement() *Statement {
 
 	parser.nextToken() // Values
 	parser.nextToken() // (
+	parser.nextToken()
 
 	var values []*query.Constant
 	for !parser.curTokenIs(RightParenSymbol) {

@@ -16,12 +16,12 @@ type TablePlan struct {
 
 func NewTablePlan(tx *tx.Transaction, tableName string, metadataMgr *metadata.MetadataManager) UpdatePlan {
 	layout := metadataMgr.GetLayout(tableName, tx)
-	stats := metadataMgr.GetStatInfo(tableName, layout, tx)
+	//stats := metadataMgr.GetStatInfo(tableName, layout, tx)
 	return TablePlan{
 		tableName: tableName,
 		tx:        tx,
 		layout:    layout,
-		stats:     stats,
+		//stats:     stats,
 	}
 }
 
