@@ -33,14 +33,14 @@ func NewTableManager(isNew bool, tx *tx.Transaction) *TableManager {
 	}
 
 	if isNew {
-		tblMgr.createTable("tblCat", tblCatSchema, tx)
-		tblMgr.createTable("fldCat", fldCatSchema, tx)
+		tblMgr.CreateTable("tblCat", tblCatSchema, tx)
+		tblMgr.CreateTable("fldCat", fldCatSchema, tx)
 	}
 
 	return tblMgr
 }
 
-func (tableMgr *TableManager) createTable(tblName string, schema *record.Schema, tx *tx.Transaction) {
+func (tableMgr *TableManager) CreateTable(tblName string, schema *record.Schema, tx *tx.Transaction) {
 	layout := record.NewLayoutFromSchema(schema)
 
 	tblCatScan := query.NewTableScan(tx, "tblCat", tableMgr.tblCatLayout)
@@ -61,11 +61,11 @@ func (tableMgr *TableManager) createTable(tblName string, schema *record.Schema,
 	fldCatScan.Close()
 }
 
-func (tableMgr *TableManager) getLayout(tableName string, tx *tx.Transaction) *record.Layout {
+func (tableMgr *TableManager) GetLayout(tableName string, tx *tx.Transaction) *record.Layout {
 	size := -1
 
 	tblCatScan := query.NewTableScan(tx, "tblCat", tableMgr.tblCatLayout)
-	for ; tblCatScan.Next(); {
+	for tblCatScan.Next() {
 		if tblCatScan.GetString("tblName") == tableName {
 			size = tblCatScan.GetInt("slotSize")
 			break
@@ -73,10 +73,10 @@ func (tableMgr *TableManager) getLayout(tableName string, tx *tx.Transaction) *r
 	}
 	tblCatScan.Close()
 
-	schema := &record.Schema{}
+	schema := record.NewSchema()
 	offsets := make(map[string]int)
 	fldCatScan := query.NewTableScan(tx, "fldCat", tableMgr.fldCatLayout)
-	for ; fldCatScan.Next(); {
+	for fldCatScan.Next() {
 		if fldCatScan.GetString("tblName") == tableName {
 			fldName := fldCatScan.GetString("fldName")
 			fldType := fldCatScan.GetInt("type")

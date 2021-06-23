@@ -34,7 +34,9 @@ func (bl *BufferList) unpin(block file.Block) {
 	bl.bufferMgr.Unpin(buff)
 
 	pinIndex := bl.findPinIndex(block)
-	bl.pins = append(bl.pins[:pinIndex], bl.pins[pinIndex+1:]...)
+	if pinIndex > -1 {
+		bl.pins = append(bl.pins[:pinIndex], bl.pins[pinIndex+1:]...)
+	}
 
 	if bl.findPinIndex(block) == -1 {
 		delete(bl.buffers, block)
@@ -42,8 +44,8 @@ func (bl *BufferList) unpin(block file.Block) {
 }
 
 func (bl *BufferList) findPinIndex(block file.Block) int {
-	for i := 0; i < len(bl.pins); i++ {
-		if bl.pins[i] == block {
+	for i, b := range bl.pins {
+		if b == block {
 			return i
 		}
 	}

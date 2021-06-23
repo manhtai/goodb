@@ -29,8 +29,7 @@ func (bufferMgr *BufferManager) GetNumAvailable() int {
 }
 
 func (bufferMgr *BufferManager) FlushAll(txNum int) {
-	for i := 0; i < bufferMgr.numAvailable; i++ {
-		buffer := bufferMgr.bufferPool[i]
+	for _, buffer := range bufferMgr.bufferPool {
 		if buffer.txNum == txNum {
 			buffer.flush()
 		}
@@ -47,7 +46,7 @@ func (bufferMgr *BufferManager) Unpin(buffer *Buffer) {
 func (bufferMgr *BufferManager) Pin(block file.Block) *Buffer {
 	buffer := bufferMgr.tryToPin(block)
 	now := time.Now()
-	for ; buffer == nil && time.Since(now) < WAIT_TIME; {
+	for buffer == nil && time.Since(now) < WAIT_TIME {
 		buffer = bufferMgr.tryToPin(block)
 		time.Sleep(time.Second)
 	}
@@ -74,8 +73,7 @@ func (bufferMgr *BufferManager) tryToPin(block file.Block) *Buffer {
 }
 
 func (bufferMgr *BufferManager) findExistingBuffer(block file.Block) *Buffer {
-	for i := 0; i < bufferMgr.numAvailable; i++ {
-		buffer := bufferMgr.bufferPool[i]
+	for _, buffer := range bufferMgr.bufferPool {
 		if buffer.block == block {
 			return buffer
 		}
@@ -84,8 +82,7 @@ func (bufferMgr *BufferManager) findExistingBuffer(block file.Block) *Buffer {
 }
 
 func (bufferMgr *BufferManager) chooseUnpinnedBuffer() *Buffer {
-	for i := 0; i < bufferMgr.numAvailable; i++ {
-		buffer := bufferMgr.bufferPool[i]
+	for _, buffer := range bufferMgr.bufferPool {
 		if !buffer.IsPinned() {
 			return buffer
 		}

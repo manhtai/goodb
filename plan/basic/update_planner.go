@@ -62,11 +62,6 @@ func (planner *BasicUpdatePlanner) ExecuteCreateTable(stmt *parse.CreateTableSta
 	return 0
 }
 
-func (planner *BasicUpdatePlanner) ExecuteCreateView(stmt *parse.CreateViewStatement, tx *tx.Transaction) int {
-	planner.metadataMgr.CreateView(stmt.ViewName, stmt.ViewDef(), tx)
-	return 0
-}
-
 func (planner *BasicUpdatePlanner) ExecuteCreateIndex(stmt *parse.CreateIndexStatement, tx *tx.Transaction) int {
 	planner.metadataMgr.CreateIndex(stmt.IndexName, stmt.TableName, stmt.FieldName, tx)
 	return 0

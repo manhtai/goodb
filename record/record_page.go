@@ -12,8 +12,8 @@ const (
 
 type RecordPage struct {
 	tx     *tx.Transaction
-	block  file.Block
 	layout *Layout
+	block  file.Block
 }
 
 func NewRecordPage(tx *tx.Transaction, block file.Block, layout *Layout) *RecordPage {
@@ -31,18 +31,19 @@ func (recordPage *RecordPage) Block() file.Block {
 
 func (recordPage *RecordPage) Format() {
 	slot := 0
-	for ; recordPage.isValidSlot(slot); slot++ {
+	for recordPage.isValidSlot(slot) {
 		offset := recordPage.offset(slot)
 		recordPage.tx.SetInt(recordPage.block, offset, EMPTY, false)
 		schema := recordPage.layout.Schema()
 		for _, fieldName := range schema.Fields() {
-			fieldPos := recordPage.offset(slot) + recordPage.layout.Offset(fieldName)
+			fieldPos := offset + recordPage.layout.Offset(fieldName)
 			if schema.Type(fieldName) == INTEGER {
 				recordPage.tx.SetInt(recordPage.block, fieldPos, 0, false)
 			} else {
 				recordPage.tx.SetString(recordPage.block, fieldPos, "", false)
 			}
 		}
+		slot++
 	}
 }
 
@@ -84,10 +85,11 @@ func (recordPage *RecordPage) InsertAfter(slot int) int {
 
 func (recordPage *RecordPage) searchAfter(slot int, flag int) int {
 	slot += 1
-	for ; recordPage.isValidSlot(slot); slot++ {
+	for recordPage.isValidSlot(slot) {
 		if recordPage.tx.GetInt(recordPage.block, recordPage.offset(slot)) == flag {
 			return slot
 		}
+		slot++
 	}
 	return -1
 }

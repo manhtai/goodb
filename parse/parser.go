@@ -24,19 +24,6 @@ func NewParser(input string) *Parser {
 	return p
 }
 
-func (parser *Parser) parse() *Ast {
-	ast := &Ast{}
-	ast.Statements = []*Statement{}
-	for !parser.curTokenIs(EOF) {
-		stmt := parser.ParseStatement()
-		if stmt != nil {
-			ast.Statements = append(ast.Statements, stmt)
-		}
-		parser.nextToken()
-	}
-	return ast
-}
-
 func (parser *Parser) ParseStatement() *Statement {
 	switch parser.curToken.Type {
 	case SelectKeyword:
@@ -46,8 +33,6 @@ func (parser *Parser) ParseStatement() *Statement {
 		switch parser.curToken.Type {
 		case TableKeyword:
 			return parser.parseCreateTableStatement()
-		case ViewKeyword:
-			return parser.parseCreateViewStatement()
 		case IndexKeyword:
 			return parser.parseCreateIndexStatement()
 		default:
@@ -174,10 +159,6 @@ func (parser *Parser) parseFieldDef() *record.Schema {
 		schema.AddStringField(fieldName, fieldLength)
 	}
 	return schema
-}
-
-func (parser *Parser) parseCreateViewStatement() *Statement {
-	panic("implement me")
 }
 
 func (parser *Parser) parseCreateIndexStatement() *Statement {

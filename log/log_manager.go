@@ -74,5 +74,5 @@ func (logMgr *LogManager) flush() {
 }
 
 func MaxLength(strLen int) int {
-	return constant.INT_SIZE + strLen*constant.INT_SIZE
+	return constant.INT_SIZE + strLen*constant.ASCII_SIZE
 }
