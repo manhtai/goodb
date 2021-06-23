@@ -6,7 +6,10 @@ type Block struct {
 }
 
 func NewBlock(filename string, blockNumber int) Block {
-	return Block{filename: filename, number: blockNumber}
+	return Block{
+		filename: filename,
+		number:   blockNumber,
+	}
 }
 
 func (b Block) Filename() string {

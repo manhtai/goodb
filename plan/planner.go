@@ -15,7 +15,6 @@ type UpdatePlaner interface {
 	ExecuteDelete(stmt *parse.DeleteStatement, tx *tx.Transaction) int
 
 	ExecuteCreateTable(stmt *parse.CreateTableStatement, tx *tx.Transaction) int
-	ExecuteCreateView(smtm *parse.CreateViewStatement, tx *tx.Transaction) int
 	ExecuteCreateIndex(stmt *parse.CreateIndexStatement, tx *tx.Transaction) int
 }
 
@@ -45,8 +44,6 @@ func (planner *Planner) ExecuteUpdatePlan(stmt *parse.Statement, tx *tx.Transact
 		return planner.updatePlanner.ExecuteUpdate(stmt.UpdateStatement, tx)
 	case parse.CreateTableKind:
 		return planner.updatePlanner.ExecuteCreateTable(stmt.CreateTableStatement, tx)
-	case parse.CreateViewKind:
-		return planner.updatePlanner.ExecuteCreateView(stmt.CreateViewStatement, tx)
 	case parse.CreateIndexKind:
 		return planner.updatePlanner.ExecuteCreateIndex(stmt.CreateIndexStatement, tx)
 	default:

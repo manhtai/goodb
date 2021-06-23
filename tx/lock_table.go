@@ -19,7 +19,7 @@ func NewLockTable() *LockTable {
 
 func (lt *LockTable) SLock(block file.Block) {
 	now := time.Now()
-	for ; lt.hasXLock(block) && time.Since(now) < WAIT_TIME; {
+	for lt.hasXLock(block) && time.Since(now) < WAIT_TIME {
 		time.Sleep(time.Second)
 	}
 	if lt.hasXLock(block) {
@@ -30,7 +30,7 @@ func (lt *LockTable) SLock(block file.Block) {
 
 func (lt *LockTable) XLock(block file.Block) {
 	now := time.Now()
-	for ; lt.hasOtherSLocks(block) && time.Since(now) < WAIT_TIME; {
+	for lt.hasOtherSLocks(block) && time.Since(now) < WAIT_TIME {
 		time.Sleep(time.Second)
 	}
 	if lt.hasOtherSLocks(block) {

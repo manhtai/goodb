@@ -57,10 +57,10 @@ func (tableScan *TableScan) GetString(fieldName string) string {
 func (tableScan *TableScan) GetVal(fieldName string) *Constant {
 	if tableScan.layout.Schema().Type(fieldName) == record.INTEGER {
 		intVal := tableScan.recordPage.GetInt(tableScan.currentSlot, fieldName)
-		return &Constant{intVal: intVal}
+		return &Constant{intVal: intVal, kind: IntKind}
 	}
 	strVal := tableScan.recordPage.GetString(tableScan.currentSlot, fieldName)
-	return &Constant{strVal: strVal}
+	return &Constant{strVal: strVal, kind: StringKind}
 }
 
 func (tableScan *TableScan) HasField(fieldName string) bool {
@@ -123,6 +123,7 @@ func (tableScan *TableScan) MoveToRecord(rcd *record.Record) {
 func (tableScan *TableScan) moveToNewBlock() {
 	tableScan.Close()
 	block := tableScan.tx.Append(tableScan.filename)
+
 	tableScan.recordPage = record.NewRecordPage(tableScan.tx, block, tableScan.layout)
 	tableScan.recordPage.Format()
 	tableScan.currentSlot = -1
@@ -131,6 +132,7 @@ func (tableScan *TableScan) moveToNewBlock() {
 func (tableScan *TableScan) moveToBlock(blockNum int) {
 	tableScan.Close()
 	block := file.NewBlock(tableScan.filename, blockNum)
+
 	tableScan.recordPage = record.NewRecordPage(tableScan.tx, block, tableScan.layout)
 	tableScan.currentSlot = -1
 }

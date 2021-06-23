@@ -1,18 +1,16 @@
 package parse
 
 import (
-	"fmt"
 	"goodb/query"
 	"goodb/record"
 )
 
-type AstKind uint
+type StatementKind int
 
 const (
-	SelectKind AstKind = iota
+	SelectKind StatementKind = iota
 	CreateTableKind
 	CreateIndexKind
-	CreateViewKind
 	InsertKind
 	DeleteKind
 	UpdateKind
@@ -27,11 +25,6 @@ type SelectStatement struct {
 type CreateTableStatement struct {
 	TableName string
 	Schema    *record.Schema
-}
-
-type CreateViewStatement struct {
-	ViewName   string
-	SelectStmt *SelectStatement
 }
 
 type CreateIndexStatement struct {
@@ -62,17 +55,8 @@ type Statement struct {
 	SelectStatement      *SelectStatement
 	CreateTableStatement *CreateTableStatement
 	CreateIndexStatement *CreateIndexStatement
-	CreateViewStatement  *CreateViewStatement
 	InsertStatement      *InsertStatement
 	DeleteStatement      *DeleteStatement
 	UpdateStatement      *UpdateStatement
-	Kind                 AstKind
-}
-
-type Ast struct {
-	Statements []*Statement
-}
-
-func (stmt CreateViewStatement) ViewDef() string {
-	return fmt.Sprintf("%s", stmt.SelectStmt)
+	Kind                 StatementKind
 }

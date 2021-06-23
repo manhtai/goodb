@@ -22,7 +22,6 @@ const (
 	CreateKeyword = "create"
 	IntKeyword    = "int"
 	TextKeyword   = "varchar"
-	ViewKeyword   = "view"
 	AsKeyword     = "as"
 	IndexKeyword  = "index"
 	OnKeyword     = "on"
@@ -55,7 +54,6 @@ var keywords = map[string]TokenType{
 	"create":  CreateKeyword,
 	"int":     IntKeyword,
 	"varchar": TextKeyword,
-	"view":    ViewKeyword,
 	"as":      AsKeyword,
 	"index":   IndexKeyword,
 	"on":      OnKeyword,

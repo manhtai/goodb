@@ -17,7 +17,7 @@ func (s *SelectScan) BeforeFirst() {
 }
 
 func (s *SelectScan) Next() bool {
-	for ; s.scan.Next(); {
+	for s.scan.Next() {
 		if s.pred.IsSatisfied(s) {
 			return true
 		}

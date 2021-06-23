@@ -20,16 +20,8 @@ func NewBasicQueryPlanner(metadataMgr *metadata.MetadataManager) *BasicQueryPlan
 func (planner *BasicQueryPlanner) CreatePlan(stmt *parse.SelectStatement, tx *tx.Transaction) plan.Plan {
 	var plans []plan.Plan
 	for _, tableName := range stmt.Tables {
-		//viewDef := planner.metadataMgr.GetViewDef(tableName, tx)
-		viewDef := ""
-		if viewDef != "" {
-			parser := parse.NewParser(viewDef)
-			selectStmt := parser.ParseStatement()
-			plans = append(plans, planner.CreatePlan(selectStmt.SelectStatement, tx))
-		} else {
-			tablePlan := plan.NewTablePlan(tx, tableName, planner.metadataMgr)
-			plans = append(plans, tablePlan)
-		}
+		tablePlan := plan.NewTablePlan(tx, tableName, planner.metadataMgr)
+		plans = append(plans, tablePlan)
 	}
 
 	if len(plans) == 0 {

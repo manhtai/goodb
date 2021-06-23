@@ -44,7 +44,7 @@ func (fileMgr *FileManager) Read(block Block, page *Page) {
 	if err != nil {
 		panic(err)
 	}
-	_, err = io.ReadAtLeast(file, page.buffer, 0)
+	_, err = io.ReadAtLeast(file, page.buffer, len(page.buffer))
 	if err != nil {
 		panic(err)
 	}
@@ -52,18 +52,22 @@ func (fileMgr *FileManager) Read(block Block, page *Page) {
 
 func (fileMgr *FileManager) Write(block Block, page *Page) {
 	file := fileMgr.getFile(block.filename)
-	_, err := file.WriteAt(page.buffer, int64(block.number*fileMgr.blockSize))
+
+	offset := int64(block.number*fileMgr.blockSize)
+	_, err := file.WriteAt(page.buffer, offset)
 	if err != nil {
 		panic(err)
 	}
 }
 
 func (fileMgr *FileManager) Append(filename string) Block {
-	newBlockNumber := len(filename)
-	block := Block{filename: filename, number: newBlockNumber}
+	newBlockNumber := fileMgr.Length(filename)
+	block := NewBlock(filename, newBlockNumber)
 	b := make([]byte, fileMgr.blockSize)
 	file := fileMgr.getFile(block.filename)
-	_, err := file.WriteAt(b, int64(block.number*fileMgr.blockSize))
+
+	offset := int64(block.number*fileMgr.blockSize)
+	_, err := file.WriteAt(b, offset)
 	if err != nil {
 		panic(err)
 	}

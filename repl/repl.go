@@ -10,7 +10,6 @@ import (
 
 const PROMPT = ">>> "
 
-// Start read text from stdin and print token to stdout
 func Start(in io.Reader, out io.Writer) {
 	scanner := bufio.NewScanner(in)
 	var db *server.GooDb
@@ -26,11 +25,10 @@ func Start(in io.Reader, out io.Writer) {
 		break
 	}
 
-	tx := db.NewTx()
-	planner := db.Planner()
-
 	for {
+		fmt.Println()
 		fmt.Printf(PROMPT)
+
 		scanned := scanner.Scan()
 		if !scanned {
 			return
@@ -39,16 +37,16 @@ func Start(in io.Reader, out io.Writer) {
 		parser := parse.NewParser(line)
 		stmt := parser.ParseStatement()
 
+		tx := db.NewTx()
+		planner := db.Planner()
+
 		switch stmt.Kind {
 		case parse.SelectKind:
 			plan := planner.CreateQueryPlan(stmt.SelectStatement, tx)
-			scan := plan.Open()
-			for scan.Next() {
-				fmt.Printf("i, %i", scan.GetInt("i"))
-				fmt.Printf("v, %s", scan.GetString("v"))
-			}
+			printTable(plan, out)
 		default:
 			planner.ExecuteUpdatePlan(stmt, tx)
+			tx.Commit()
 		}
 	}
 }

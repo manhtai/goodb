@@ -1,5 +1,7 @@
 package file
 
+import "goodb/constant"
+
 type Page struct {
 	buffer []byte
 }
@@ -27,14 +29,14 @@ func (p *Page) SetInt(offset int, n int) {
 
 func (p *Page) GetBytes(offset int) []byte {
 	length := p.GetInt(offset)
-	bytes := p.buffer[offset+1 : offset+length+1]
+	bytes := p.buffer[offset+constant.INT_SIZE : offset+length+constant.INT_SIZE]
 	return bytes
 }
 
 func (p *Page) SetBytes(offset int, bytes []byte) {
 	p.SetInt(offset, len(bytes))
 	for i := 0; i < len(bytes); i++ {
-		p.buffer[offset+i+1] = bytes[i]
+		p.buffer[offset+i+constant.INT_SIZE] = bytes[i]
 	}
 }
 

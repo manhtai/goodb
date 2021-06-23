@@ -11,5 +11,4 @@ type IndexInfo struct {
 	tx        *tx.Transaction
 	tblSchema *record.Schema
 	idxLayout *record.Layout
-	statInfo  *StatInfo
 }
