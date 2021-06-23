@@ -5,14 +5,14 @@ type Block struct {
 	number   int
 }
 
-func NewBlock(filename string, blockNumber int) *Block {
-	return &Block{filename: filename, number: blockNumber}
+func NewBlock(filename string, blockNumber int) Block {
+	return Block{filename: filename, number: blockNumber}
 }
 
-func (b *Block) Filename() string {
+func (b Block) Filename() string {
 	return b.filename
 }
 
-func (b *Block) Number() int {
+func (b Block) Number() int {
 	return b.number
 }

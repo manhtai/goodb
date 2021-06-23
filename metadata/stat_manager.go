@@ -15,7 +15,10 @@ type StatManager struct {
 }
 
 func NewStatManager(tableMgr *TableManager, tx *tx.Transaction) *StatManager {
-	statMgr := &StatManager{tableMgr: tableMgr}
+	statMgr := &StatManager{
+		tableMgr:  tableMgr,
+		tableStat: make(map[string]*StatInfo),
+	}
 	statMgr.refreshStats(tx)
 	return statMgr
 }

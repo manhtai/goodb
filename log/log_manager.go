@@ -1,16 +1,15 @@
 package log
 
 import (
+	"goodb/constant"
 	"goodb/file"
 )
-
-const INT_SIZE = 4
 
 type LogManager struct {
 	fileMgr      *file.FileManager
 	logFile      string
 	logPage      *file.Page
-	currentBlock *file.Block
+	currentBlock file.Block
 	latestLSN    int
 	lastSavedLSN int
 }
@@ -26,7 +25,7 @@ func NewLogManager(fileMgr *file.FileManager, logFile string) *LogManager {
 		logPage: logPage,
 	}
 
-	var currentBlock *file.Block
+	var currentBlock file.Block
 	if logSize == 0 {
 		currentBlock = logMgr.appendNewBlock()
 	} else {
@@ -41,9 +40,9 @@ func NewLogManager(fileMgr *file.FileManager, logFile string) *LogManager {
 func (logMgr *LogManager) Append(logRecord []byte) int {
 	boundary := logMgr.logPage.GetInt(0)
 	recordSize := len(logRecord)
-	bytesNeeded := recordSize + INT_SIZE
+	bytesNeeded := recordSize + constant.INT_SIZE
 
-	if boundary-bytesNeeded < INT_SIZE {
+	if boundary-bytesNeeded < constant.INT_SIZE {
 		logMgr.flush()
 		logMgr.currentBlock = logMgr.appendNewBlock()
 		boundary = logMgr.logPage.GetInt(0)
@@ -56,7 +55,7 @@ func (logMgr *LogManager) Append(logRecord []byte) int {
 	return logMgr.latestLSN
 }
 
-func (logMgr *LogManager) appendNewBlock() *file.Block {
+func (logMgr *LogManager) appendNewBlock() file.Block {
 	block := logMgr.fileMgr.Append(logMgr.logFile)
 	logMgr.logPage.SetInt(0, logMgr.fileMgr.BlockSize())
 	logMgr.fileMgr.Write(block, logMgr.logPage)
@@ -72,4 +71,8 @@ func (logMgr *LogManager) Flush(lsn int) {
 func (logMgr *LogManager) flush() {
 	logMgr.fileMgr.Write(logMgr.currentBlock, logMgr.logPage)
 	logMgr.lastSavedLSN = logMgr.latestLSN
+}
+
+func MaxLength(strLen int) int {
+	return constant.INT_SIZE + strLen*constant.INT_SIZE
 }

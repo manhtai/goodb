@@ -15,7 +15,7 @@ type ViewManager struct {
 func NewViewManager(isNew bool, tableMgr *TableManager, tx *tx.Transaction) *ViewManager {
 	viewMgr := &ViewManager{tableMgr: tableMgr}
 	if isNew {
-		schema := &record.Schema{}
+		schema := record.NewSchema()
 		schema.AddStringField("viewName", MAX_NAME)
 		schema.AddStringField("viewDef", MAX_VIEW_DEF)
 		viewMgr.tableMgr.createTable("viewCat", schema, tx)

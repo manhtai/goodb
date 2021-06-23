@@ -11,13 +11,13 @@ type ProjectPlan struct {
 }
 
 func NewProjectPlan(p Plan, fields []string) *ProjectPlan {
-	schema := record.Schema{}
+	schema := record.NewSchema()
 	for _, fieldName := range fields {
 		schema.AddSchema(fieldName, p.Schema())
 	}
 	return &ProjectPlan{
 		p:      p,
-		schema: &schema,
+		schema: schema,
 	}
 }
 

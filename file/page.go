@@ -5,11 +5,15 @@ type Page struct {
 }
 
 func NewPage(blockSize int) *Page {
-	return &Page{buffer: make([]byte, blockSize)}
+	return &Page{
+		buffer: make([]byte, blockSize),
+	}
 }
 
 func NewPageFromBytes(bytes []byte) *Page {
-	return &Page{buffer: bytes}
+	return &Page{
+		buffer: bytes,
+	}
 }
 
 func (p *Page) GetInt(offset int) int {
@@ -23,7 +27,7 @@ func (p *Page) SetInt(offset int, n int) {
 
 func (p *Page) GetBytes(offset int) []byte {
 	length := p.GetInt(offset)
-	bytes := p.buffer[offset : offset+length]
+	bytes := p.buffer[offset+1 : offset+length+1]
 	return bytes
 }
 

@@ -16,7 +16,7 @@ func Start(in io.Reader, out io.Writer) {
 	var db *server.GooDb
 
 	for {
-		fmt.Printf("Choose a database name...")
+		fmt.Printf("Choose a database name to connect: ")
 		scanned := scanner.Scan()
 		if !scanned {
 			continue
@@ -44,7 +44,8 @@ func Start(in io.Reader, out io.Writer) {
 			plan := planner.CreateQueryPlan(stmt.SelectStatement, tx)
 			scan := plan.Open()
 			for scan.Next() {
-				// TODO: Display values in table format
+				fmt.Printf("i, %i", scan.GetInt("i"))
+				fmt.Printf("v, %s", scan.GetString("v"))
 			}
 		default:
 			planner.ExecuteUpdatePlan(stmt, tx)

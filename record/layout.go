@@ -1,6 +1,6 @@
 package record
 
-import "goodb/log"
+import "goodb/constant"
 
 type Layout struct {
 	schema   *Schema
@@ -18,10 +18,10 @@ func NewLayout(schema *Schema, offsets map[string]int, slotSize int) *Layout {
 
 func NewLayoutFromSchema(schema *Schema) *Layout {
 	offsets := make(map[string]int)
-	pos := log.INT_SIZE
+	pos := constant.INT_SIZE
 	for _, field := range schema.fields {
 		offsets[field] = pos
-		pos += schema.Length(field)
+		pos += schema.LengthInBytes(field)
 	}
 
 	return &Layout{

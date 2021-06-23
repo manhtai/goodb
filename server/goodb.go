@@ -14,7 +14,7 @@ import (
 const (
 	BLOCK_SIZE  = 400
 	BUFFER_SIZE = 8
-	LOG_FILE    = "goodb.log"
+	LOG_FILE    = "gooDb.log"
 )
 
 type GooDb struct {
