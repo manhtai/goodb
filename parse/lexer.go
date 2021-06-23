@@ -44,10 +44,10 @@ func (l *Lexer) NextToken() Token {
 		tok.Type = EOF
 	default:
 		if l.ch == '\'' {
-			l.readChar()
+			l.readChar() // left '
 			tok.Literal = l.readIdentifier()
 			tok.Type = StringConstant
-			l.readChar()
+			l.readChar() // right '
 			return tok
 		} else if isLetter(l.ch) {
 			tok.Literal = l.readIdentifier()

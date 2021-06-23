@@ -53,7 +53,7 @@ func (fileMgr *FileManager) Read(block Block, page *Page) {
 func (fileMgr *FileManager) Write(block Block, page *Page) {
 	file := fileMgr.getFile(block.filename)
 
-	offset := int64(block.number*fileMgr.blockSize)
+	offset := int64(block.number * fileMgr.blockSize)
 	_, err := file.WriteAt(page.buffer, offset)
 	if err != nil {
 		panic(err)
@@ -66,7 +66,7 @@ func (fileMgr *FileManager) Append(filename string) Block {
 	b := make([]byte, fileMgr.blockSize)
 	file := fileMgr.getFile(block.filename)
 
-	offset := int64(block.number*fileMgr.blockSize)
+	offset := int64(block.number * fileMgr.blockSize)
 	_, err := file.WriteAt(b, offset)
 	if err != nil {
 		panic(err)

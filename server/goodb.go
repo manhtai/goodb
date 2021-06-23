@@ -14,7 +14,7 @@ import (
 const (
 	BLOCK_SIZE  = 400
 	BUFFER_SIZE = 8
-	LOG_FILE    = "gooDb.log"
+	LOG_FILE    = "goodb.log"
 )
 
 type GooDb struct {
@@ -39,9 +39,9 @@ func NewGooDb(dirName string) *GooDb {
 
 	isNew := fileMgr.IsNew()
 	if isNew {
-		fmt.Println("Create new database")
+		fmt.Printf("Create new database: %s\n", dirName)
 	} else {
-		fmt.Println("Recover old database")
+		fmt.Printf("Recover old database: %s\n", dirName)
 		transaction.Recover()
 	}
 	metadataMgr := metadata.NewMetadataManager(isNew, transaction)

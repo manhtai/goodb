@@ -57,10 +57,10 @@ func (tableScan *TableScan) GetString(fieldName string) string {
 func (tableScan *TableScan) GetVal(fieldName string) *Constant {
 	if tableScan.layout.Schema().Type(fieldName) == record.INTEGER {
 		intVal := tableScan.recordPage.GetInt(tableScan.currentSlot, fieldName)
-		return &Constant{intVal: intVal, kind: IntKind}
+		return &Constant{intVal: intVal, kind: IntConstant}
 	}
 	strVal := tableScan.recordPage.GetString(tableScan.currentSlot, fieldName)
-	return &Constant{strVal: strVal, kind: StringKind}
+	return &Constant{strVal: strVal, kind: StringConstant}
 }
 
 func (tableScan *TableScan) HasField(fieldName string) bool {
@@ -82,7 +82,7 @@ func (tableScan *TableScan) SetString(fieldName string, val string) {
 }
 
 func (tableScan *TableScan) SetVal(fieldName string, val *Constant) {
-	if val.kind == StringKind {
+	if val.kind == StringConstant {
 		tableScan.SetString(fieldName, val.strVal)
 	} else {
 		tableScan.SetInt(fieldName, val.intVal)
