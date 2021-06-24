@@ -34,7 +34,7 @@ func (p *ProjectScan) GetString(fieldName string) string {
 	panic("invalid field name")
 }
 
-func (p *ProjectScan) GetVal(fieldName string) *Constant {
+func (p *ProjectScan) GetVal(fieldName string) Constant {
 	if p.HasField(fieldName) {
 		return p.scan.GetVal(fieldName)
 	}

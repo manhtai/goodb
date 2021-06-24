@@ -13,7 +13,7 @@ type IndexManager struct {
 
 func NewIndexManager(isNew bool, tableMgr *TableManager, tx *tx.Transaction) *IndexManager {
 	if isNew {
-		schema := &record.Schema{}
+		schema := record.NewSchema()
 		schema.AddStringField("indexName", MAX_NAME)
 		schema.AddStringField("tableName", MAX_NAME)
 		schema.AddStringField("fieldName", MAX_NAME)

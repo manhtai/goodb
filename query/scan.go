@@ -9,7 +9,7 @@ type Scan interface {
 	GetString(fieldName string) string
 	HasField(fieldName string) bool
 	Close()
-	GetVal(fieldName string) *Constant
+	GetVal(fieldName string) Constant
 }
 
 type UpdateScan interface {
@@ -17,7 +17,7 @@ type UpdateScan interface {
 
 	SetInt(fieldName string, val int)
 	SetString(fieldName string, val string)
-	SetVal(fieldName string, val *Constant)
+	SetVal(fieldName string, val Constant)
 	Insert()
 	Delete()
 	GetRecord() *record.Record

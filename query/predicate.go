@@ -1,12 +1,11 @@
 package query
 
 type Predicate struct {
-	terms []*Term
+	terms []Term
 }
 
-func NewPredicateFromTerm(term *Term) *Predicate {
-	terms := []*Term{term}
-	return &Predicate{terms: terms}
+func NewPredicateFromTerms(terms []Term) Predicate {
+	return Predicate{terms: terms}
 }
 
 func (pre *Predicate) IsSatisfied(s Scan) bool {

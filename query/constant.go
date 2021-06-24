@@ -3,8 +3,8 @@ package query
 type ConstantKind int
 
 const (
-	StringKind ConstantKind = iota
-	IntKind
+	StringConstant ConstantKind = iota
+	IntConstant
 )
 
 type Constant struct {
@@ -13,10 +13,10 @@ type Constant struct {
 	kind   ConstantKind
 }
 
-func NewIntConstant(val int) *Constant {
-	return &Constant{intVal: val, kind: IntKind}
+func NewIntConstant(val int) Constant {
+	return Constant{intVal: val, kind: IntConstant}
 }
 
-func NewStrConstant(val string) *Constant {
-	return &Constant{strVal: val, kind: StringKind}
+func NewStrConstant(val string) Constant {
+	return Constant{strVal: val, kind: StringConstant}
 }

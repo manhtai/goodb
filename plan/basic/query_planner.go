@@ -17,7 +17,7 @@ func NewBasicQueryPlanner(metadataMgr *metadata.MetadataManager) *BasicQueryPlan
 	}
 }
 
-func (planner *BasicQueryPlanner) CreatePlan(stmt *parse.SelectStatement, tx *tx.Transaction) plan.Plan {
+func (planner *BasicQueryPlanner) CreatePlan(stmt parse.SelectStatement, tx *tx.Transaction) plan.Plan {
 	var plans []plan.Plan
 	for _, tableName := range stmt.Tables {
 		tablePlan := plan.NewTablePlan(tx, tableName, planner.metadataMgr)

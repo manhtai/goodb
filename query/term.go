@@ -1,12 +1,12 @@
 package query
 
 type Term struct {
-	left  *Expression
-	right *Expression
+	left  Expression
+	right Expression
 }
 
-func NewTerm(left *Expression, right *Expression) *Term {
-	return &Term{
+func NewTerm(left Expression, right Expression) Term {
+	return Term{
 		left:  left,
 		right: right,
 	}
