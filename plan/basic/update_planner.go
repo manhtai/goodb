@@ -47,12 +47,14 @@ func (planner *BasicUpdatePlanner) ExecuteUpdate(stmt parse.UpdateStatement, tx 
 }
 
 func (planner *BasicUpdatePlanner) ExecuteDelete(stmt parse.DeleteStatement, tx *tx.Transaction) int {
-	p := plan.NewTablePlan(tx, stmt.TableName, planner.metadataMgr)
-	modifyScan := p.OpenToUpdate()
+	tablePlan := plan.NewTablePlan(tx, stmt.TableName, planner.metadataMgr)
+	modifyPlan := plan.NewModifyPlan(tablePlan, stmt.Predicate)
+	modifyScan := modifyPlan.OpenToUpdate()
 
-	var count int
-	for count = 0; modifyScan.Next(); count++ {
+	count := 0
+	for modifyScan.Next() {
 		modifyScan.Delete()
+		count++
 	}
 
 	modifyScan.Close()
