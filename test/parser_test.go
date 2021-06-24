@@ -140,3 +140,110 @@ func TestSelectStatement(t *testing.T) {
 		}
 	}
 }
+
+func TestUpdateStatement(t *testing.T) {
+	tests := []struct {
+		input  string
+		output parse.UpdateStatement
+	}{
+		{"update a set b = 1", parse.UpdateStatement{
+			TableName: "a",
+			FieldName: "b",
+			Expression: query.NewConstantExpression(query.NewIntConstant(1)),
+		}},
+		{"update a set b = c", parse.UpdateStatement{
+			TableName: "a",
+			FieldName: "b",
+			Expression: query.NewFieldExpression("c"),
+		}},
+		{"update a set b = c where a = 1", parse.UpdateStatement{
+			TableName: "a",
+			FieldName: "b",
+			Expression: query.NewFieldExpression("c"),
+			Predicate: query.NewPredicateFromTerms([]query.Term{
+				query.NewTerm(
+					query.NewFieldExpression("a"),
+					query.NewConstantExpression(query.NewIntConstant(1)),
+				),
+			}),
+		}},
+		{"update a set b = c where a = 1 and b = d", parse.UpdateStatement{
+			TableName: "a",
+			FieldName: "b",
+			Expression: query.NewFieldExpression("c"),
+			Predicate: query.NewPredicateFromTerms([]query.Term{
+				query.NewTerm(
+					query.NewFieldExpression("a"),
+					query.NewConstantExpression(query.NewIntConstant(1)),
+				),
+				query.NewTerm(
+					query.NewFieldExpression("b"),
+					query.NewFieldExpression("d"),
+				),
+			}),
+		}},
+	}
+
+	for _, inout := range tests {
+		parser := parse.NewParser(inout.input)
+		stmt := parser.ParseStatement()
+		if stmt.Kind != parse.UpdateKind || printStruct(stmt.UpdateStatement) != printStruct(inout.output) {
+			t.Errorf("Expect:\n %+v\nGot:\n %+v", inout.output, stmt.UpdateStatement)
+		}
+	}
+}
+
+func TestDeleteStatement(t *testing.T) {
+	tests := []struct {
+		input  string
+		output parse.DeleteStatement
+	}{
+		{"delete from b where a = 1", parse.DeleteStatement{
+			TableName: "b",
+			Predicate: query.NewPredicateFromTerms([]query.Term{
+				query.NewTerm(
+					query.NewFieldExpression("a"),
+					query.NewConstantExpression(query.NewIntConstant(1)),
+				),
+			}),
+		}},
+		{"delete from c where a = 1 and b = '2'", parse.DeleteStatement{
+			TableName: "c",
+			Predicate: query.NewPredicateFromTerms([]query.Term{
+				query.NewTerm(
+					query.NewFieldExpression("a"),
+					query.NewConstantExpression(query.NewIntConstant(1)),
+				),
+				query.NewTerm(
+					query.NewFieldExpression("b"),
+					query.NewConstantExpression(query.NewStrConstant("2")),
+				),
+			}),
+		}},
+		{"delete from d where a = 1 and b = '2' and 'bar' = c", parse.DeleteStatement{
+			TableName: "d",
+			Predicate: query.NewPredicateFromTerms([]query.Term{
+				query.NewTerm(
+					query.NewFieldExpression("a"),
+					query.NewConstantExpression(query.NewIntConstant(1)),
+				),
+				query.NewTerm(
+					query.NewFieldExpression("b"),
+					query.NewConstantExpression(query.NewStrConstant("2")),
+				),
+				query.NewTerm(
+					query.NewConstantExpression(query.NewStrConstant("bar")),
+					query.NewFieldExpression("c"),
+				),
+			}),
+		}},
+	}
+
+	for _, inout := range tests {
+		parser := parse.NewParser(inout.input)
+		stmt := parser.ParseStatement()
+		if stmt.Kind != parse.DeleteKind || printStruct(stmt.DeleteStatement) != printStruct(inout.output) {
+			t.Errorf("Expect:\n %+v\nGot:\n %+v", inout.output, stmt.DeleteStatement)
+		}
+	}
+}

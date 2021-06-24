@@ -67,18 +67,12 @@ func (parser *Parser) parseSelectStatement() Statement {
 		}
 	}
 
-	terms := make([]query.Term, 0)
-	for !parser.curTokenIs(EOF) {
-		term := parser.parseTerm()
-		terms = append(terms, term)
-	}
-
-	predicate := query.NewPredicateFromTerms(terms)
+	pred := parser.parsePredicate()
 
 	stmt := SelectStatement{
 		Fields:    fields,
 		Tables:    tables,
-		Predicate: predicate,
+		Predicate: pred,
 	}
 
 	return Statement{
@@ -205,7 +199,22 @@ func (parser *Parser) parseInsertStatement() Statement {
 }
 
 func (parser *Parser) parseDeleteStatement() Statement {
-	panic("implement me")
+	parser.nextToken() // from
+
+	parser.nextToken() // table
+	tableName := parser.curToken.Literal
+
+	parser.nextToken() // where
+	pred := parser.parsePredicate()
+	stmt := DeleteStatement{
+		TableName: tableName,
+		Predicate: pred,
+	}
+
+	return Statement{
+		DeleteStatement: stmt,
+		Kind: DeleteKind,
+	}
 }
 
 func (parser *Parser) parseUpdateStatement() Statement {
@@ -223,18 +232,7 @@ func (parser *Parser) parseUpdateStatement() Statement {
 	exp := parser.parseExpression()
 
 	parser.nextToken() // where
-
-	terms := make([]query.Term, 0)
-	for !parser.curTokenIs(EOF) {
-		term := parser.parseTerm()
-		terms = append(terms, term)
-
-		if parser.peekTokenIs(AndKeyword) {
-			parser.nextToken()
-		}
-	}
-
-	pred := query.NewPredicateFromTerms(terms)
+	pred := parser.parsePredicate()
 
 	stmt := UpdateStatement{
 		TableName:  tableName,
@@ -257,6 +255,20 @@ func (parser *Parser) parseExpressionStatement() query.Expression {
 		exp = query.NewConstantExpression(parseConstant(parser.curToken))
 	}
 	return exp
+}
+
+func (parser *Parser) parsePredicate() query.Predicate {
+	terms := make([]query.Term, 0)
+	for !parser.curTokenIs(EOF) {
+		term := parser.parseTerm()
+		terms = append(terms, term)
+
+		if parser.peekTokenIs(AndKeyword) {
+			parser.nextToken()
+		}
+	}
+
+	return query.NewPredicateFromTerms(terms)
 }
 
 func (parser *Parser) nextToken() {
