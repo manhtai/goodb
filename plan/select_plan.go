@@ -17,6 +17,7 @@ func NewSelectPlan(p Plan, pred query.Predicate) *SelectPlan {
 	}
 }
 
+
 func (sp *SelectPlan) Open() query.Scan {
 	scan := sp.plan.Open()
 	return query.NewSelectScan(scan, sp.predicate)
@@ -25,3 +26,4 @@ func (sp *SelectPlan) Open() query.Scan {
 func (sp *SelectPlan) Schema() record.Schema {
 	return sp.plan.Schema()
 }
+

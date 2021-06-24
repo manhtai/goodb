@@ -31,8 +31,9 @@ func (planner *BasicUpdatePlanner) ExecuteInsert(stmt parse.InsertStatement, tx 
 }
 
 func (planner *BasicUpdatePlanner) ExecuteUpdate(stmt parse.UpdateStatement, tx *tx.Transaction) int {
-	p := plan.NewTablePlan(tx, stmt.TableName, planner.metadataMgr)
-	modifyScan := p.OpenToUpdate()
+	tablePlan := plan.NewTablePlan(tx, stmt.TableName, planner.metadataMgr)
+	modifyPlan := plan.NewModifyPlan(tablePlan, stmt.Predicate)
+	modifyScan := modifyPlan.OpenToUpdate()
 
 	count := 0
 	for modifyScan.Next() {
