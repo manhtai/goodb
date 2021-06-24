@@ -2,12 +2,12 @@ package query
 
 type SelectScan struct {
 	scan Scan
-	pred *Predicate
+	pred Predicate
 }
 
-func NewSelectScan(scan *Scan, pred *Predicate) *SelectScan {
+func NewSelectScan(scan Scan, pred Predicate) *SelectScan {
 	return &SelectScan{
-		scan: *scan,
+		scan: scan,
 		pred: pred,
 	}
 }
@@ -33,7 +33,7 @@ func (s *SelectScan) GetString(fieldName string) string {
 	return s.scan.GetString(fieldName)
 }
 
-func (s *SelectScan) GetVal(fieldName string) *Constant {
+func (s *SelectScan) GetVal(fieldName string) Constant {
 	return s.scan.GetVal(fieldName)
 }
 

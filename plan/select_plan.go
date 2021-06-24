@@ -7,10 +7,10 @@ import (
 
 type SelectPlan struct {
 	plan      Plan
-	predicate *query.Predicate
+	predicate query.Predicate
 }
 
-func NewSelectPlan(p Plan, pred *query.Predicate) *SelectPlan {
+func NewSelectPlan(p Plan, pred query.Predicate) *SelectPlan {
 	return &SelectPlan{
 		plan:      p,
 		predicate: pred,
@@ -19,7 +19,7 @@ func NewSelectPlan(p Plan, pred *query.Predicate) *SelectPlan {
 
 func (sp *SelectPlan) Open() query.Scan {
 	scan := sp.plan.Open()
-	return query.NewSelectScan(&scan, sp.predicate)
+	return query.NewSelectScan(scan, sp.predicate)
 }
 
 func (sp *SelectPlan) Schema() record.Schema {

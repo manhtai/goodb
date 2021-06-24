@@ -6,16 +6,16 @@ import (
 )
 
 type QueryPlanner interface {
-	CreatePlan(stmt *parse.SelectStatement, tx *tx.Transaction) Plan
+	CreatePlan(stmt parse.SelectStatement, tx *tx.Transaction) Plan
 }
 
 type UpdatePlaner interface {
-	ExecuteInsert(stmt *parse.InsertStatement, tx *tx.Transaction) int
-	ExecuteUpdate(stmt *parse.UpdateStatement, tx *tx.Transaction) int
-	ExecuteDelete(stmt *parse.DeleteStatement, tx *tx.Transaction) int
+	ExecuteInsert(stmt parse.InsertStatement, tx *tx.Transaction) int
+	ExecuteUpdate(stmt parse.UpdateStatement, tx *tx.Transaction) int
+	ExecuteDelete(stmt parse.DeleteStatement, tx *tx.Transaction) int
 
-	ExecuteCreateTable(stmt *parse.CreateTableStatement, tx *tx.Transaction) int
-	ExecuteCreateIndex(stmt *parse.CreateIndexStatement, tx *tx.Transaction) int
+	ExecuteCreateTable(stmt parse.CreateTableStatement, tx *tx.Transaction) int
+	ExecuteCreateIndex(stmt parse.CreateIndexStatement, tx *tx.Transaction) int
 }
 
 type Planner struct {
@@ -30,11 +30,11 @@ func NewPlanner(query QueryPlanner, update UpdatePlaner) *Planner {
 	}
 }
 
-func (planner *Planner) CreateQueryPlan(stmt *parse.SelectStatement, tx *tx.Transaction) Plan {
+func (planner *Planner) CreateQueryPlan(stmt parse.SelectStatement, tx *tx.Transaction) Plan {
 	return planner.queryPlanner.CreatePlan(stmt, tx)
 }
 
-func (planner *Planner) ExecuteUpdatePlan(stmt *parse.Statement, tx *tx.Transaction) int {
+func (planner *Planner) ExecuteUpdatePlan(stmt parse.Statement, tx *tx.Transaction) int {
 	switch stmt.Kind {
 	case parse.InsertKind:
 		return planner.updatePlanner.ExecuteInsert(stmt.InsertStatement, tx)

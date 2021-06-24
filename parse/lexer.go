@@ -45,7 +45,7 @@ func (l *Lexer) NextToken() Token {
 	default:
 		if l.ch == '\'' {
 			l.readChar() // left '
-			tok.Literal = l.readIdentifier()
+			tok.Literal = l.readQuotedString()
 			tok.Type = StringConstant
 			l.readChar() // right '
 			return tok
@@ -72,6 +72,14 @@ func newToken(tokenType TokenType, ch byte) Token {
 func (l *Lexer) readIdentifier() string {
 	position := l.position
 	for isLetter(l.ch) {
+		l.readChar()
+	}
+	return l.input[position:l.position]
+}
+
+func (l *Lexer) readQuotedString() string {
+	position := l.position
+	for isLetter(l.ch) || isDigit(l.ch) {
 		l.readChar()
 	}
 	return l.input[position:l.position]

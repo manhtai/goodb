@@ -13,10 +13,10 @@ type Constant struct {
 	kind   ConstantKind
 }
 
-func NewIntConstant(val int) *Constant {
-	return &Constant{intVal: val, kind: IntConstant}
+func NewIntConstant(val int) Constant {
+	return Constant{intVal: val, kind: IntConstant}
 }
 
-func NewStrConstant(val string) *Constant {
-	return &Constant{strVal: val, kind: StringConstant}
+func NewStrConstant(val string) Constant {
+	return Constant{strVal: val, kind: StringConstant}
 }

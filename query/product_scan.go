@@ -40,7 +40,7 @@ func (p *ProductScan) GetString(fieldName string) string {
 	return p.scan2.GetString(fieldName)
 }
 
-func (p *ProductScan) GetVal(fieldName string) *Constant {
+func (p *ProductScan) GetVal(fieldName string) Constant {
 	if p.scan1.HasField(fieldName) {
 		return p.scan1.GetVal(fieldName)
 	}
