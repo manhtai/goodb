@@ -7,33 +7,37 @@ import (
 
 type Schema struct {
 	fields []string
-	info   map[string]*FieldInfo
+	info   map[string]FieldInfo
 }
 
 func NewSchema() *Schema {
 	return &Schema{
 		fields: make([]string, 0),
-		info:   make(map[string]*FieldInfo),
+		info:   make(map[string]FieldInfo),
 	}
 }
 
-func (s *Schema) AddSchema(field string, schema Schema) {
+func (s *Schema) AddSchema(field string, schema Schema) *Schema {
 	fType := schema.Type(field)
 	fLength := schema.Length(field)
 	s.AddField(field, fType, fLength)
+	return s
 }
 
-func (s *Schema) AddField(field string, fType int, fLength int) {
+func (s *Schema) AddField(field string, fType int, fLength int) *Schema {
 	s.fields = append(s.fields, field)
-	s.info[field] = &FieldInfo{Type: fType, Length: fLength}
+	s.info[field] = FieldInfo{Type: fType, Length: fLength}
+	return s
 }
 
-func (s *Schema) AddIntField(field string) {
+func (s *Schema) AddIntField(field string) *Schema {
 	s.AddField(field, INTEGER, 0)
+	return s
 }
 
-func (s *Schema) AddStringField(field string, length int) {
+func (s *Schema) AddStringField(field string, length int) *Schema {
 	s.AddField(field, VARCHAR, length)
+	return s
 }
 
 func (s *Schema) HasField(field string) bool {

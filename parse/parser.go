@@ -88,7 +88,7 @@ func (parser *Parser) parseSelectStatement() Statement {
 }
 
 func (parser *Parser) parseTerm() query.Term {
-	parser.nextToken()  // left
+	parser.nextToken() // left
 	left := parser.parseExpression()
 	parser.nextToken() // =
 	parser.nextToken() // right
@@ -118,7 +118,6 @@ func (parser *Parser) parseCreateTableStatement() Statement {
 	tableName := parser.curToken.Literal
 	parser.nextToken() // (
 	schema := parser.parseFieldDefs()
-	parser.nextToken() // )
 	stmt := CreateTableStatement{
 		TableName: tableName,
 		Schema:    schema,
@@ -132,25 +131,25 @@ func (parser *Parser) parseCreateTableStatement() Statement {
 func (parser *Parser) parseFieldDefs() record.Schema {
 	parser.nextToken()
 	schema := parser.parseFieldDef()
-	for !parser.peekTokenIs(RightParenSymbol) {
+	for !parser.curTokenIs(RightParenSymbol) {
 		if parser.curTokenIs(CommaSymbol) {
 			parser.nextToken()
 			continue
 		}
 		fSchema := parser.parseFieldDef()
-		schema.Add(*fSchema)
+		schema.Add(fSchema)
+
 	}
-	return *schema
+	return schema
 }
 
-func (parser *Parser) parseFieldDef() *record.Schema {
+func (parser *Parser) parseFieldDef() record.Schema {
 	fieldName := parser.curToken.Literal
 	schema := record.NewSchema()
 
 	if parser.peekTokenIs(IntKeyword) {
 		parser.nextToken()
 		schema.AddIntField(fieldName)
-		parser.nextToken()
 	} else {
 		parser.nextToken() // varchar
 		parser.nextToken() // (
@@ -159,7 +158,8 @@ func (parser *Parser) parseFieldDef() *record.Schema {
 		parser.nextToken() // )
 		schema.AddStringField(fieldName, fieldLength)
 	}
-	return schema
+	parser.nextToken()
+	return *schema
 }
 
 func (parser *Parser) parseCreateIndexStatement() Statement {

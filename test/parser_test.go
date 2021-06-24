@@ -1,11 +1,75 @@
 package test
 
 import (
-	"fmt"
 	"goodb/parse"
 	"goodb/query"
+	"goodb/record"
 	"testing"
 )
+
+func TestCreateTableStatement(t *testing.T) {
+	tests := []struct {
+		input  string
+		output parse.CreateTableStatement
+	}{
+		{"create table a (b int, c varchar(50))", parse.CreateTableStatement{
+			TableName: "a",
+			Schema:    *record.NewSchema().AddIntField("b").AddStringField("c", 50),
+		}},
+		{"create table a (b int, c varchar(50), d int)", parse.CreateTableStatement{
+			TableName: "a",
+			Schema:    *record.NewSchema().AddIntField("b").AddStringField("c", 50).AddIntField("d"),
+		}},
+	}
+
+	for _, inout := range tests {
+		parser := parse.NewParser(inout.input)
+		stmt := parser.ParseStatement()
+		if stmt.Kind != parse.CreateTableKind || printStruct(stmt.CreateTableStatement) != printStruct(inout.output) {
+			t.Errorf("Expect:\n %+v\nGot:\n %+v", inout.output, stmt.CreateTableStatement)
+		}
+	}
+}
+
+func TestInsertStatement(t *testing.T) {
+	tests := []struct {
+		input  string
+		output parse.InsertStatement
+	}{
+		{"insert into a(b) values ('2')", parse.InsertStatement{
+			TableName: "a",
+			Fields:    []string{"b"},
+			Values: []query.Constant{
+				query.NewStrConstant("2"),
+			},
+		}},
+		{"insert into a(b, c) values (1, '2')", parse.InsertStatement{
+			TableName: "a",
+			Fields:    []string{"b", "c"},
+			Values: []query.Constant{
+				query.NewIntConstant(1),
+				query.NewStrConstant("2"),
+			},
+		}},
+		{"insert into a(b, c, d) values (1, '2', 'bar')", parse.InsertStatement{
+			TableName: "a",
+			Fields:    []string{"b", "c", "d"},
+			Values: []query.Constant{
+				query.NewIntConstant(1),
+				query.NewStrConstant("2"),
+				query.NewStrConstant("bar"),
+			},
+		}},
+	}
+
+	for _, inout := range tests {
+		parser := parse.NewParser(inout.input)
+		stmt := parser.ParseStatement()
+		if stmt.Kind != parse.InsertKind || printStruct(stmt.InsertStatement) != printStruct(inout.output) {
+			t.Errorf("Expect:\n %+v\nGot:\n %+v", inout.output, stmt.InsertStatement)
+		}
+	}
+}
 
 func TestSelectStatement(t *testing.T) {
 	tests := []struct {
@@ -75,8 +139,4 @@ func TestSelectStatement(t *testing.T) {
 			t.Errorf("Expect:\n %+v\nGot:\n %+v", inout.output, stmt.SelectStatement)
 		}
 	}
-}
-
-func printStruct(v interface{}) string {
-	return fmt.Sprintf("%+v", v)
 }
