@@ -1,4 +1,4 @@
-name: goodb CI
+name: Tests
 
 on:
   push:
