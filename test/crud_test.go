@@ -2,7 +2,6 @@ package test
 
 import (
 	"goodb/file"
-	"goodb/parse"
 	"goodb/server"
 	"os"
 	"testing"
@@ -53,28 +52,5 @@ func TestCRUD(t *testing.T) {
 	c = parseAndExecute(db, "select i, v from test where v = 'bar'")
 	if c != 1 {
 		t.Errorf("Expect 1, got %d", c)
-	}
-}
-
-func parseAndExecute(db *server.GooDb, text string) int {
-	tx := db.NewTx()
-	planner := db.Planner()
-	parser := parse.NewParser(text)
-	stmt := parser.ParseStatement()
-
-	switch stmt.Kind {
-	case parse.SelectKind:
-		plan := planner.CreateQueryPlan(stmt.SelectStatement, tx)
-		scan := plan.Open()
-		count := 0
-		for scan.Next() {
-			count++
-		}
-		return count
-
-	default:
-		count := planner.ExecuteUpdatePlan(stmt, tx)
-		tx.Commit()
-		return count
 	}
 }
