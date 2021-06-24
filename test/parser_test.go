@@ -147,18 +147,18 @@ func TestUpdateStatement(t *testing.T) {
 		output parse.UpdateStatement
 	}{
 		{"update a set b = 1", parse.UpdateStatement{
-			TableName: "a",
-			FieldName: "b",
+			TableName:  "a",
+			FieldName:  "b",
 			Expression: query.NewConstantExpression(query.NewIntConstant(1)),
 		}},
 		{"update a set b = c", parse.UpdateStatement{
-			TableName: "a",
-			FieldName: "b",
+			TableName:  "a",
+			FieldName:  "b",
 			Expression: query.NewFieldExpression("c"),
 		}},
 		{"update a set b = c where a = 1", parse.UpdateStatement{
-			TableName: "a",
-			FieldName: "b",
+			TableName:  "a",
+			FieldName:  "b",
 			Expression: query.NewFieldExpression("c"),
 			Predicate: query.NewPredicateFromTerms([]query.Term{
 				query.NewTerm(
@@ -168,8 +168,8 @@ func TestUpdateStatement(t *testing.T) {
 			}),
 		}},
 		{"update a set b = c where a = 1 and b = d", parse.UpdateStatement{
-			TableName: "a",
-			FieldName: "b",
+			TableName:  "a",
+			FieldName:  "b",
 			Expression: query.NewFieldExpression("c"),
 			Predicate: query.NewPredicateFromTerms([]query.Term{
 				query.NewTerm(

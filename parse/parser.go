@@ -213,7 +213,7 @@ func (parser *Parser) parseDeleteStatement() Statement {
 
 	return Statement{
 		DeleteStatement: stmt,
-		Kind: DeleteKind,
+		Kind:            DeleteKind,
 	}
 }
 

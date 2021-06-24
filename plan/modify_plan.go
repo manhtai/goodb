@@ -6,13 +6,13 @@ import (
 )
 
 type ModifyPlan struct {
-	plan UpdatePlan
+	plan      UpdatePlan
 	predicate query.Predicate
 }
 
 func NewModifyPlan(p UpdatePlan, pred query.Predicate) *ModifyPlan {
 	return &ModifyPlan{
-		plan: p,
+		plan:      p,
 		predicate: pred,
 	}
 }
