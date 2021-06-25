@@ -32,6 +32,6 @@ go run main.go
 - DB implementation: [The SimpleDB Database System][0]
 - Parser: [Writing An Interpreter In Go][1]
 
-
 [0]: http://www.cs.bc.edu/~sciore/simpledb/
+
 [1]: https://interpreterbook.com/
