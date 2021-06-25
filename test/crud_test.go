@@ -31,7 +31,7 @@ func TestCRUD(t *testing.T) {
 	}
 
 	c = parseAndExecute(db, "select i, v, ti, name from test, test_case")
-	if c != 3 {
+	if c != 2 {
 		t.Errorf("Expect 3, got %d", c)
 	}
 
