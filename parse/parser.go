@@ -62,6 +62,10 @@ func (parser *Parser) parseSelectStatement() Statement {
 		}
 		parser.nextToken()
 
+		if parser.curTokenIs(CommaSymbol) {
+			parser.nextToken()
+		}
+
 		if parser.curTokenIs(WhereKeyword) {
 			break
 		}

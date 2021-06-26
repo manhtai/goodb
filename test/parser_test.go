@@ -80,8 +80,8 @@ func TestSelectStatement(t *testing.T) {
 			Tables: []string{"b"},
 			Fields: []string{"a"},
 		}},
-		{"select a, b from c", parse.SelectStatement{
-			Tables: []string{"c"},
+		{"select a, b from c, d", parse.SelectStatement{
+			Tables: []string{"c", "d"},
 			Fields: []string{"a", "b"},
 		}},
 		{"select a, b from c where a = 1", parse.SelectStatement{

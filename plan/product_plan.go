@@ -12,14 +12,14 @@ type ProductPlan struct {
 }
 
 func NewProductPlan(plan1 Plan, plan2 Plan) *ProductPlan {
-	schema := record.Schema{}
+	schema := record.NewSchema()
 	schema.Add(plan1.Schema())
 	schema.Add(plan2.Schema())
 
 	return &ProductPlan{
 		plan1:  plan1,
 		plan2:  plan2,
-		schema: &schema,
+		schema: schema,
 	}
 }
 

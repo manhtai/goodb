@@ -6,10 +6,12 @@ type ProductScan struct {
 }
 
 func NewProductScan(scan1 Scan, scan2 Scan) *ProductScan {
-	return &ProductScan{
+	scan := &ProductScan{
 		scan1: scan1,
 		scan2: scan2,
 	}
+	scan.BeforeFirst()
+	return scan
 }
 
 func (p *ProductScan) BeforeFirst() {

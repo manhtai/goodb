@@ -3,6 +3,7 @@ package test
 import (
 	"fmt"
 	"goodb/parse"
+	"goodb/record"
 	"goodb/server"
 )
 
@@ -20,8 +21,17 @@ func parseAndExecute(db *server.GooDb, text string) int {
 	case parse.SelectKind:
 		plan := planner.CreateQueryPlan(stmt.SelectStatement, tx)
 		scan := plan.Open()
+		schema := plan.Schema()
+
 		count := 0
 		for scan.Next() {
+			for _, fldName := range schema.Fields() {
+				if schema.Type(fldName) == record.INTEGER {
+					scan.GetInt(fldName)
+				} else {
+					scan.GetString(fldName)
+				}
+			}
 			count++
 		}
 		return count
