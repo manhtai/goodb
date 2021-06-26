@@ -12,9 +12,11 @@ type MetadataManager struct {
 
 func NewMetadataManager(isNew bool, tx *tx.Transaction) *MetadataManager {
 	tableMgr := NewTableManager(isNew, tx)
+	indexMgr := NewIndexManager(isNew, tableMgr, tx)
 
 	return &MetadataManager{
 		tableMgr: tableMgr,
+		indexMgr: indexMgr,
 	}
 }
 

@@ -161,7 +161,26 @@ func (parser *Parser) parseFieldDef() record.Schema {
 }
 
 func (parser *Parser) parseCreateIndexStatement() Statement {
-	panic("implement me")
+	parser.nextToken()
+	indexName := parser.curToken.Literal
+
+	parser.nextToken() // on
+	parser.nextToken()
+	tableName := parser.curToken.Literal
+
+	parser.nextToken() // (
+	parser.nextToken()
+	fieldName := parser.curToken.Literal
+
+	stmt := CreateIndexStatement{
+		IndexName: indexName,
+		TableName: tableName,
+		FieldName: fieldName,
+	}
+	return Statement{
+		CreateIndexStatement: stmt,
+		Kind:                 CreateIndexKind,
+	}
 }
 
 func (parser *Parser) parseInsertStatement() Statement {

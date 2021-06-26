@@ -247,3 +247,24 @@ func TestDeleteStatement(t *testing.T) {
 		}
 	}
 }
+
+func TestCreateIndexStatement(t *testing.T) {
+	tests := []struct {
+		input  string
+		output parse.CreateIndexStatement
+	}{
+		{"create index idx_a_b on a (b)", parse.CreateIndexStatement{
+			IndexName: "idx_a_b",
+			TableName: "a",
+			FieldName: "b",
+		}},
+	}
+
+	for _, inout := range tests {
+		parser := parse.NewParser(inout.input)
+		stmt := parser.ParseStatement()
+		if stmt.Kind != parse.CreateIndexKind || printStruct(stmt.CreateIndexStatement) != printStruct(inout.output) {
+			t.Errorf("Expect:\n %+v\nGot:\n %+v", inout.output, stmt.CreateIndexStatement)
+		}
+	}
+}

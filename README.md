@@ -9,7 +9,8 @@ goodb
 
 ```sql
 CREATE TABLE
-INSERT
+    CREATE INDEX
+    INSERT
 SELECT
 DELETE
 ```
