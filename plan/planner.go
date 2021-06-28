@@ -1,6 +1,7 @@
 package plan
 
 import (
+	"goodb/metadata"
 	"goodb/parse"
 	"goodb/tx"
 )
@@ -9,7 +10,7 @@ type QueryPlanner interface {
 	CreatePlan(stmt parse.SelectStatement, tx *tx.Transaction) Plan
 }
 
-type UpdatePlaner interface {
+type UpdatePlanner interface {
 	ExecuteInsert(stmt parse.InsertStatement, tx *tx.Transaction) int
 	ExecuteUpdate(stmt parse.UpdateStatement, tx *tx.Transaction) int
 	ExecuteDelete(stmt parse.DeleteStatement, tx *tx.Transaction) int
@@ -18,12 +19,15 @@ type UpdatePlaner interface {
 	ExecuteCreateIndex(stmt parse.CreateIndexStatement, tx *tx.Transaction) int
 }
 
+type QueryPlannerFunc func(metadataMgr *metadata.MetadataManager) QueryPlanner
+type UpdatePlannerFunc func(metadataMgr *metadata.MetadataManager) UpdatePlanner
+
 type Planner struct {
 	queryPlanner  QueryPlanner
-	updatePlanner UpdatePlaner
+	updatePlanner UpdatePlanner
 }
 
-func NewPlanner(query QueryPlanner, update UpdatePlaner) *Planner {
+func NewPlanner(query QueryPlanner, update UpdatePlanner) *Planner {
 	return &Planner{
 		queryPlanner:  query,
 		updatePlanner: update,

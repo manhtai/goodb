@@ -21,7 +21,7 @@ func Start(in io.Reader, out io.Writer) {
 			continue
 		}
 		dbDir := scanner.Text()
-		db = server.NewGooDb(dbDir)
+		db = server.NewGooDbBasic(dbDir)
 		break
 	}
 

@@ -11,7 +11,7 @@ type BasicUpdatePlanner struct {
 	metadataMgr *metadata.MetadataManager
 }
 
-func NewBasicUpdatePlanner(metadataMgr *metadata.MetadataManager) *BasicUpdatePlanner {
+func NewBasicUpdatePlanner(metadataMgr *metadata.MetadataManager) plan.UpdatePlanner {
 	return &BasicUpdatePlanner{
 		metadataMgr: metadataMgr,
 	}
@@ -62,7 +62,7 @@ func (planner *BasicUpdatePlanner) ExecuteDelete(stmt parse.DeleteStatement, tx 
 }
 
 func (planner *BasicUpdatePlanner) ExecuteCreateTable(stmt parse.CreateTableStatement, tx *tx.Transaction) int {
-	planner.metadataMgr.CreateTable(stmt.TableName, &stmt.Schema, tx)
+	planner.metadataMgr.CreateTable(stmt.TableName, stmt.Schema, tx)
 	return 0
 }
 

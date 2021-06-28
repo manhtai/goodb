@@ -5,8 +5,8 @@ type Record struct {
 	slot        int
 }
 
-func NewRecord(blockNumber int, slot int) *Record {
-	return &Record{
+func NewRecord(blockNumber int, slot int) Record {
+	return Record{
 		blockNumber: blockNumber,
 		slot:        slot,
 	}

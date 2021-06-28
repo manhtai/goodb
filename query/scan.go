@@ -20,6 +20,6 @@ type UpdateScan interface {
 	SetVal(fieldName string, val Constant)
 	Insert()
 	Delete()
-	GetRecord() *record.Record
-	MoveToRecord(record *record.Record)
+	GetRecord() record.Record
+	MoveToRecord(record record.Record)
 }

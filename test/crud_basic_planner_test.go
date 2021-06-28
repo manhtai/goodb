@@ -7,16 +7,17 @@ import (
 	"testing"
 )
 
-func TestCRUD(t *testing.T) {
+func TestBasicPlannerCRUD(t *testing.T) {
 	os.RemoveAll(file.DB_DIR_PREFIX)
-	db := server.NewGooDb("test")
+	db := server.NewGooDbBasic("test")
 
-	// CREATE
+	// CREATE TABLE
 	parseAndExecute(db, "create table test(i int, v varchar(10))")
+	parseAndExecute(db, "create table test_case(ti int, name varchar(10))")
+
+	// INSERT
 	parseAndExecute(db, "insert into test(i, v) values (1, 'hi')")
 	parseAndExecute(db, "insert into test(i, v) values (2, 'bar')")
-
-	parseAndExecute(db, "create table test_case(ti int, name varchar(10))")
 	parseAndExecute(db, "insert into test_case(ti, name) values (1, 'baz')")
 
 	// RETRIEVE

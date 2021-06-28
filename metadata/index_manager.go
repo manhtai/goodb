@@ -7,21 +7,21 @@ import (
 )
 
 type IndexManager struct {
-	layout   *record.Layout
-	tableMgr *TableManager
+	layout   record.Layout
+	tableMgr TableManager
 }
 
-func NewIndexManager(isNew bool, tableMgr *TableManager, tx *tx.Transaction) *IndexManager {
+func NewIndexManager(isNew bool, tableMgr TableManager, tx *tx.Transaction) IndexManager {
 	if isNew {
 		schema := record.NewSchema()
 		schema.AddStringField("indexName", MAX_NAME)
 		schema.AddStringField("tableName", MAX_NAME)
 		schema.AddStringField("fieldName", MAX_NAME)
-		tableMgr.CreateTable("idxCat", schema, tx)
+		tableMgr.CreateTable("idxCat", *schema, tx)
 	}
 
 	layout := tableMgr.GetLayout("idxCat", tx)
-	return &IndexManager{
+	return IndexManager{
 		layout:   layout,
 		tableMgr: tableMgr,
 	}
@@ -48,7 +48,7 @@ func (indexMgr *IndexManager) getIndexInfo(tblName string, tx *tx.Transaction) m
 			indexInfo := &IndexInfo{
 				idxName:   idxName,
 				fldName:   fldName,
-				tblSchema: tblLayout.Schema(),
+				tblSchema: *tblLayout.Schema(),
 				tx:        tx,
 			}
 			result[fldName] = indexInfo

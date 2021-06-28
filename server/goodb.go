@@ -8,6 +8,7 @@ import (
 	"goodb/metadata"
 	"goodb/plan"
 	"goodb/plan/basic"
+	"goodb/plan/opt"
 	"goodb/tx"
 )
 
@@ -20,12 +21,25 @@ const (
 type GooDb struct {
 	fileMgr     *file.FileManager
 	bufferMgr   *buffer.BufferManager
+	indexMgr    *metadata.IndexManager
 	logMgr      *log.LogManager
 	metadataMgr *metadata.MetadataManager
 	planner     *plan.Planner
 }
 
-func NewGooDb(dirName string) *GooDb {
+func NewGooDbBasic(dirName string) *GooDb {
+	return NewGooDbWithPlanner(dirName, basic.NewBasicQueryPlanner, basic.NewBasicUpdatePlanner)
+}
+
+func NewGooDbOpt(dirName string) *GooDb {
+	return NewGooDbWithPlanner(dirName, opt.NewOptQueryPlanner, opt.NewIndexUpdatePlanner)
+}
+
+func NewGooDbWithPlanner(
+	dirName string,
+	queryPlannerFunc plan.QueryPlannerFunc,
+	updatePlannerFunc plan.UpdatePlannerFunc,
+) *GooDb {
 	fileMgr := file.NewFileManager(dirName, BLOCK_SIZE)
 	logMgr := log.NewLogManager(fileMgr, LOG_FILE)
 	bufferMgr := buffer.NewBufferManager(fileMgr, logMgr, BUFFER_SIZE)
@@ -45,8 +59,8 @@ func NewGooDb(dirName string) *GooDb {
 		transaction.Recover()
 	}
 	metadataMgr := metadata.NewMetadataManager(isNew, transaction)
-	queryPlanner := basic.NewBasicQueryPlanner(metadataMgr)
-	updatePlanner := basic.NewBasicUpdatePlanner(metadataMgr)
+	queryPlanner := queryPlannerFunc(metadataMgr)
+	updatePlanner := updatePlannerFunc(metadataMgr)
 	planner := plan.NewPlanner(queryPlanner, updatePlanner)
 
 	gooDb.metadataMgr = metadataMgr

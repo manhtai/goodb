@@ -9,15 +9,15 @@ import (
 const MAX_NAME = 16
 
 type TableManager struct {
-	tblCatLayout *record.Layout
-	fldCatLayout *record.Layout
+	tblCatLayout record.Layout
+	fldCatLayout record.Layout
 }
 
-func NewTableManager(isNew bool, tx *tx.Transaction) *TableManager {
+func NewTableManager(isNew bool, tx *tx.Transaction) TableManager {
 	tblCatSchema := record.NewSchema()
 	tblCatSchema.AddStringField("tblName", MAX_NAME)
 	tblCatSchema.AddIntField("slotSize")
-	tblCatLayout := record.NewLayoutFromSchema(tblCatSchema)
+	tblCatLayout := record.NewLayoutFromSchema(*tblCatSchema)
 
 	fldCatSchema := record.NewSchema()
 	fldCatSchema.AddStringField("tblName", MAX_NAME)
@@ -25,22 +25,22 @@ func NewTableManager(isNew bool, tx *tx.Transaction) *TableManager {
 	fldCatSchema.AddIntField("type")
 	fldCatSchema.AddIntField("length")
 	fldCatSchema.AddIntField("offset")
-	fldCatLayout := record.NewLayoutFromSchema(fldCatSchema)
+	fldCatLayout := record.NewLayoutFromSchema(*fldCatSchema)
 
-	tblMgr := &TableManager{
+	tblMgr := TableManager{
 		tblCatLayout: tblCatLayout,
 		fldCatLayout: fldCatLayout,
 	}
 
 	if isNew {
-		tblMgr.CreateTable("tblCat", tblCatSchema, tx)
-		tblMgr.CreateTable("fldCat", fldCatSchema, tx)
+		tblMgr.CreateTable("tblCat", *tblCatSchema, tx)
+		tblMgr.CreateTable("fldCat", *fldCatSchema, tx)
 	}
 
 	return tblMgr
 }
 
-func (tableMgr *TableManager) CreateTable(tblName string, schema *record.Schema, tx *tx.Transaction) {
+func (tableMgr *TableManager) CreateTable(tblName string, schema record.Schema, tx *tx.Transaction) {
 	layout := record.NewLayoutFromSchema(schema)
 
 	tblCatScan := query.NewTableScan(tx, "tblCat", tableMgr.tblCatLayout)
@@ -61,7 +61,7 @@ func (tableMgr *TableManager) CreateTable(tblName string, schema *record.Schema,
 	fldCatScan.Close()
 }
 
-func (tableMgr *TableManager) GetLayout(tableName string, tx *tx.Transaction) *record.Layout {
+func (tableMgr *TableManager) GetLayout(tableName string, tx *tx.Transaction) record.Layout {
 	size := -1
 
 	tblCatScan := query.NewTableScan(tx, "tblCat", tableMgr.tblCatLayout)
@@ -88,5 +88,5 @@ func (tableMgr *TableManager) GetLayout(tableName string, tx *tx.Transaction) *r
 	}
 	fldCatScan.Close()
 
-	return record.NewLayout(schema, offsets, size)
+	return record.NewLayout(*schema, offsets, size)
 }

@@ -12,7 +12,7 @@ import (
 func TestTableManager(t *testing.T) {
 	os.RemoveAll(file.DB_DIR_PREFIX)
 
-	db := server.NewGooDb("test")
+	db := server.NewGooDbBasic("test")
 
 	tx := db.NewTx()
 	tm := metadata.NewTableManager(true, tx)
@@ -20,7 +20,7 @@ func TestTableManager(t *testing.T) {
 	schema := record.NewSchema()
 	schema.AddIntField("i")
 	schema.AddStringField("v", 9)
-	tm.CreateTable("TestTable", schema, tx)
+	tm.CreateTable("TestTable", *schema, tx)
 
 	layout := tm.GetLayout("TestTable", tx)
 

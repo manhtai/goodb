@@ -12,14 +12,14 @@ import (
 func TestRecord(t *testing.T) {
 	os.RemoveAll(file.DB_DIR_PREFIX)
 
-	db := server.NewGooDb("test")
+	db := server.NewGooDbBasic("test")
 	tx := db.NewTx()
 
 	schema := record.NewSchema()
 	schema.AddIntField("i")
 	schema.AddStringField("v", 9)
 
-	layout := record.NewLayoutFromSchema(schema)
+	layout := record.NewLayoutFromSchema(*schema)
 	block := tx.Append("testFile")
 	tx.Pin(block)
 	recordPage := record.NewRecordPage(tx, block, layout)
