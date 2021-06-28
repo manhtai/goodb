@@ -43,7 +43,7 @@ func (planner *IndexUpdatePlanner) ExecuteInsert(stmt parse.InsertStatement, tx 
 	return 1
 }
 
-func (planner *IndexUpdatePlanner)ExecuteUpdate(stmt parse.UpdateStatement, tx *tx.Transaction) int {
+func (planner *IndexUpdatePlanner) ExecuteUpdate(stmt parse.UpdateStatement, tx *tx.Transaction) int {
 	tblName := stmt.TableName
 	fldName := stmt.FieldName
 
@@ -65,11 +65,10 @@ func (planner *IndexUpdatePlanner)ExecuteUpdate(stmt parse.UpdateStatement, tx *
 		modifyScan.SetVal(stmt.FieldName, val)
 		count++
 
-
 		if idx != nil {
 			rcd := modifyScan.GetRecord()
-			idx.Delete(oldVal, rcd);
-			idx.Insert(val, rcd);
+			idx.Delete(oldVal, rcd)
+			idx.Insert(val, rcd)
 		}
 	}
 
@@ -77,7 +76,7 @@ func (planner *IndexUpdatePlanner)ExecuteUpdate(stmt parse.UpdateStatement, tx *
 	return count
 }
 
-func (planner *IndexUpdatePlanner)ExecuteDelete(stmt parse.DeleteStatement, tx *tx.Transaction) int{
+func (planner *IndexUpdatePlanner) ExecuteDelete(stmt parse.DeleteStatement, tx *tx.Transaction) int {
 	tblName := stmt.TableName
 	tablePlan := plan.NewTablePlan(tx, tblName, planner.metadataMgr)
 	modifyPlan := plan.NewModifyPlan(tablePlan, stmt.Predicate)
@@ -100,12 +99,12 @@ func (planner *IndexUpdatePlanner)ExecuteDelete(stmt parse.DeleteStatement, tx *
 	return count
 }
 
-func (planner *IndexUpdatePlanner)ExecuteCreateTable(stmt parse.CreateTableStatement, tx *tx.Transaction) int {
+func (planner *IndexUpdatePlanner) ExecuteCreateTable(stmt parse.CreateTableStatement, tx *tx.Transaction) int {
 	planner.metadataMgr.CreateTable(stmt.TableName, stmt.Schema, tx)
 	return 0
 }
 
-func (planner *IndexUpdatePlanner)ExecuteCreateIndex(stmt parse.CreateIndexStatement, tx *tx.Transaction) int {
+func (planner *IndexUpdatePlanner) ExecuteCreateIndex(stmt parse.CreateIndexStatement, tx *tx.Transaction) int {
 	planner.metadataMgr.CreateIndex(stmt.IndexName, stmt.TableName, stmt.FieldName, tx)
 	return 0
 }

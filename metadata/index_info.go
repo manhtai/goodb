@@ -18,16 +18,17 @@ type IndexInfo struct {
 func NewIndexInfo(idxName string, fldName string, tx *tx.Transaction, tblSchema record.Schema) *IndexInfo {
 	idxLayout := createIndexLayout(tblSchema, fldName)
 	return &IndexInfo{
-		idxName: idxName,
-		fldName: fldName,
-		tx: tx,
+		idxName:   idxName,
+		fldName:   fldName,
+		tx:        tx,
 		tblSchema: tblSchema,
 		idxLayout: idxLayout,
 	}
 }
 
 func (idxInfo *IndexInfo) Open() index.Index {
-	return btree.NewBTreeIndex(idxInfo.tx, idxInfo.idxName, idxInfo.idxLayout)
+	bTreeIndex := btree.NewBTreeIndex(idxInfo.tx, idxInfo.idxName, idxInfo.idxLayout)
+	return &bTreeIndex
 }
 
 func createIndexLayout(tblSchema record.Schema, fldName string) record.Layout {
