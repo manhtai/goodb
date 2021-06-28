@@ -19,7 +19,7 @@ func TestRecord(t *testing.T) {
 	schema.AddIntField("i")
 	schema.AddStringField("v", 9)
 
-	layout := record.NewLayoutFromSchema(schema)
+	layout := record.NewLayoutFromSchema(*schema)
 	block := tx.Append("testFile")
 	tx.Pin(block)
 	recordPage := record.NewRecordPage(tx, block, layout)

@@ -21,6 +21,7 @@ const (
 type GooDb struct {
 	fileMgr     *file.FileManager
 	bufferMgr   *buffer.BufferManager
+	indexMgr    *metadata.IndexManager
 	logMgr      *log.LogManager
 	metadataMgr *metadata.MetadataManager
 	planner     *plan.Planner

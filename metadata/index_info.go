@@ -41,5 +41,5 @@ func createIndexLayout(tblSchema record.Schema, fldName string) record.Layout {
 		fldLen := tblSchema.Length(fldName)
 		schema.AddStringField("dataVal", fldLen)
 	}
-	return record.NewLayoutFromSchema(schema)
+	return record.NewLayoutFromSchema(*schema)
 }

@@ -14,11 +14,11 @@ func TestCreateTableStatement(t *testing.T) {
 	}{
 		{"create table a (b int, c varchar(50))", parse.CreateTableStatement{
 			TableName: "a",
-			Schema:    record.NewSchema().AddIntField("b").AddStringField("c", 50),
+			Schema:    *record.NewSchema().AddIntField("b").AddStringField("c", 50),
 		}},
 		{"create table a (b int, c varchar(50), d int)", parse.CreateTableStatement{
 			TableName: "a",
-			Schema:    record.NewSchema().AddIntField("b").AddStringField("c", 50).AddIntField("d"),
+			Schema:    *record.NewSchema().AddIntField("b").AddStringField("c", 50).AddIntField("d"),
 		}},
 	}
 

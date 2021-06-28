@@ -19,7 +19,7 @@ func NewProductPlan(plan1 Plan, plan2 Plan) *ProductPlan {
 	return &ProductPlan{
 		plan1:  plan1,
 		plan2:  plan2,
-		schema: schema,
+		schema: *schema,
 	}
 }
 

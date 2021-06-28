@@ -31,8 +31,8 @@ func NewLayoutFromSchema(schema Schema) Layout {
 	}
 }
 
-func (l *Layout) Schema() Schema {
-	return l.schema
+func (l *Layout) Schema() *Schema {
+	return &l.schema
 }
 
 func (l *Layout) Offset(field string) int {

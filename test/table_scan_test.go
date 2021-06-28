@@ -20,7 +20,7 @@ func TestTableScan(t *testing.T) {
 	schema.AddIntField("i")
 	schema.AddStringField("v", 9)
 
-	layout := record.NewLayoutFromSchema(schema)
+	layout := record.NewLayoutFromSchema(*schema)
 	for _, fldName := range layout.Schema().Fields() {
 		offset := layout.Offset(fldName)
 		fmt.Printf("Field %s has offset %d\n", fldName, offset)

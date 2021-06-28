@@ -31,5 +31,5 @@ func (tp TablePlan) Open() query.Scan {
 }
 
 func (tp TablePlan) Schema() record.Schema {
-	return tp.layout.Schema()
+	return *tp.layout.Schema()
 }

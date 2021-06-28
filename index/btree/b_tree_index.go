@@ -29,11 +29,11 @@ func NewBTreeIndex(tx *tx.Transaction, idxName string, idxLayout record.Layout) 
 
 	// Dir
 	schema := record.NewSchema()
-	schema.AddSchema("currentBlock", idxLayout.Schema())
-	schema.AddSchema("dataVal", idxLayout.Schema())
+	schema.AddSchema("currentBlock", *idxLayout.Schema())
+	schema.AddSchema("dataVal", *idxLayout.Schema())
 
 	dirTable := fmt.Sprintf("%sDir", idxName)
-	dirLayout := record.NewLayoutFromSchema(schema)
+	dirLayout := record.NewLayoutFromSchema(*schema)
 	rootBlock := file.NewBlock(dirTable, 0)
 
 	if tx.Size(dirTable) == 0 {

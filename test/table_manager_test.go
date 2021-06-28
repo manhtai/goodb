@@ -20,7 +20,7 @@ func TestTableManager(t *testing.T) {
 	schema := record.NewSchema()
 	schema.AddIntField("i")
 	schema.AddStringField("v", 9)
-	tm.CreateTable("TestTable", schema, tx)
+	tm.CreateTable("TestTable", *schema, tx)
 
 	layout := tm.GetLayout("TestTable", tx)
 

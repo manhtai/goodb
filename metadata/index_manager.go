@@ -17,7 +17,7 @@ func NewIndexManager(isNew bool, tableMgr TableManager, tx *tx.Transaction) Inde
 		schema.AddStringField("indexName", MAX_NAME)
 		schema.AddStringField("tableName", MAX_NAME)
 		schema.AddStringField("fieldName", MAX_NAME)
-		tableMgr.CreateTable("idxCat", schema, tx)
+		tableMgr.CreateTable("idxCat", *schema, tx)
 	}
 
 	layout := tableMgr.GetLayout("idxCat", tx)
@@ -48,7 +48,7 @@ func (indexMgr *IndexManager) getIndexInfo(tblName string, tx *tx.Transaction) m
 			indexInfo := &IndexInfo{
 				idxName:   idxName,
 				fldName:   fldName,
-				tblSchema: tblLayout.Schema(),
+				tblSchema: *tblLayout.Schema(),
 				tx:        tx,
 			}
 			result[fldName] = indexInfo

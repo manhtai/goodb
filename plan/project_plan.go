@@ -17,7 +17,7 @@ func NewProjectPlan(p Plan, fields []string) *ProjectPlan {
 	}
 	return &ProjectPlan{
 		p:      p,
-		schema: schema,
+		schema: *schema,
 	}
 }
 
