@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestOptCRUD(t *testing.T) {
+func TestOptPlannerCRUD(t *testing.T) {
 	os.RemoveAll(file.DB_DIR_PREFIX)
 	db := server.NewGooDbOpt("test")
 

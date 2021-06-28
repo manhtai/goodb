@@ -7,7 +7,7 @@ import (
 
 type ProjectPlan struct {
 	p      Plan
-	schema *record.Schema
+	schema record.Schema
 }
 
 func NewProjectPlan(p Plan, fields []string) *ProjectPlan {
@@ -27,5 +27,5 @@ func (pp *ProjectPlan) Open() query.Scan {
 }
 
 func (pp *ProjectPlan) Schema() record.Schema {
-	return *pp.schema
+	return pp.schema
 }

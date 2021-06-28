@@ -8,7 +8,7 @@ import (
 type ProductPlan struct {
 	plan1  Plan
 	plan2  Plan
-	schema *record.Schema
+	schema record.Schema
 }
 
 func NewProductPlan(plan1 Plan, plan2 Plan) *ProductPlan {
@@ -28,5 +28,5 @@ func (pp *ProductPlan) Open() query.Scan {
 }
 
 func (pp *ProductPlan) Schema() record.Schema {
-	return *pp.schema
+	return pp.schema
 }

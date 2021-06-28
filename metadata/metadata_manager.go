@@ -6,8 +6,8 @@ import (
 )
 
 type MetadataManager struct {
-	tableMgr *TableManager
-	indexMgr *IndexManager
+	tableMgr TableManager
+	indexMgr IndexManager
 }
 
 func NewMetadataManager(isNew bool, tx *tx.Transaction) *MetadataManager {
@@ -20,11 +20,11 @@ func NewMetadataManager(isNew bool, tx *tx.Transaction) *MetadataManager {
 	}
 }
 
-func (metaMgr *MetadataManager) CreateTable(tblName string, schema *record.Schema, tx *tx.Transaction) {
+func (metaMgr *MetadataManager) CreateTable(tblName string, schema record.Schema, tx *tx.Transaction) {
 	metaMgr.tableMgr.CreateTable(tblName, schema, tx)
 }
 
-func (metaMgr *MetadataManager) GetLayout(tblName string, tx *tx.Transaction) *record.Layout {
+func (metaMgr *MetadataManager) GetLayout(tblName string, tx *tx.Transaction) record.Layout {
 	return metaMgr.tableMgr.GetLayout(tblName, tx)
 }
 

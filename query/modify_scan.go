@@ -67,10 +67,10 @@ func (s *ModifyScan) Delete() {
 	s.scan.Delete()
 }
 
-func (s *ModifyScan) GetRecord() *record.Record {
+func (s *ModifyScan) GetRecord() record.Record {
 	return s.scan.GetRecord()
 }
 
-func (s *ModifyScan) MoveToRecord(rcd *record.Record) {
+func (s *ModifyScan) MoveToRecord(rcd record.Record) {
 	s.scan.MoveToRecord(rcd)
 }

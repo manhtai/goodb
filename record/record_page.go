@@ -12,11 +12,11 @@ const (
 
 type RecordPage struct {
 	tx     *tx.Transaction
-	layout *Layout
+	layout Layout
 	block  file.Block
 }
 
-func NewRecordPage(tx *tx.Transaction, block file.Block, layout *Layout) *RecordPage {
+func NewRecordPage(tx *tx.Transaction, block file.Block, layout Layout) *RecordPage {
 	tx.Pin(block)
 	return &RecordPage{
 		tx:     tx,

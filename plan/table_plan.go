@@ -10,7 +10,7 @@ import (
 type TablePlan struct {
 	tableName string
 	tx        *tx.Transaction
-	layout    *record.Layout
+	layout    record.Layout
 }
 
 func NewTablePlan(tx *tx.Transaction, tableName string, metadataMgr *metadata.MetadataManager) UpdatePlan {
@@ -31,5 +31,5 @@ func (tp TablePlan) Open() query.Scan {
 }
 
 func (tp TablePlan) Schema() record.Schema {
-	return *tp.layout.Schema()
+	return tp.layout.Schema()
 }

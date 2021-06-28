@@ -157,7 +157,7 @@ func (parser *Parser) parseFieldDef() record.Schema {
 		schema.AddStringField(fieldName, fieldLength)
 	}
 	parser.nextToken()
-	return *schema
+	return schema
 }
 
 func (parser *Parser) parseCreateIndexStatement() Statement {

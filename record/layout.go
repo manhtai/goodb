@@ -3,20 +3,20 @@ package record
 import "goodb/constant"
 
 type Layout struct {
-	schema   *Schema
+	schema   Schema
 	offsets  map[string]int
 	slotSize int
 }
 
-func NewLayout(schema *Schema, offsets map[string]int, slotSize int) *Layout {
-	return &Layout{
+func NewLayout(schema Schema, offsets map[string]int, slotSize int) Layout {
+	return Layout{
 		schema:   schema,
 		offsets:  offsets,
 		slotSize: slotSize,
 	}
 }
 
-func NewLayoutFromSchema(schema *Schema) *Layout {
+func NewLayoutFromSchema(schema Schema) Layout {
 	offsets := make(map[string]int)
 	pos := constant.INT_SIZE
 	for _, field := range schema.fields {
@@ -24,14 +24,14 @@ func NewLayoutFromSchema(schema *Schema) *Layout {
 		pos += schema.LengthInBytes(field)
 	}
 
-	return &Layout{
+	return Layout{
 		schema:   schema,
 		offsets:  offsets,
 		slotSize: pos,
 	}
 }
 
-func (l *Layout) Schema() *Schema {
+func (l *Layout) Schema() Schema {
 	return l.schema
 }
 

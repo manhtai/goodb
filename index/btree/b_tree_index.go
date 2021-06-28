@@ -16,6 +16,12 @@ type BTreeIndex struct{
 	rootBlock file.Block
 }
 
+func NewBTreeIndex(tx *tx.Transaction, idxName string, idxLayout record.Layout) BTreeIndex {
+	return BTreeIndex{
+		tx: tx,
+	}
+}
+
 func (BTreeIndex) BeforeFirst(key query.Constant) {
 	panic("implement me")
 }

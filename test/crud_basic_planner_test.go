@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestSimplePlannerCRUD(t *testing.T) {
+func TestBasicPlannerCRUD(t *testing.T) {
 	os.RemoveAll(file.DB_DIR_PREFIX)
 	db := server.NewGooDbBasic("test")
 

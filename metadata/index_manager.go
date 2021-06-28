@@ -7,11 +7,11 @@ import (
 )
 
 type IndexManager struct {
-	layout   *record.Layout
-	tableMgr *TableManager
+	layout   record.Layout
+	tableMgr TableManager
 }
 
-func NewIndexManager(isNew bool, tableMgr *TableManager, tx *tx.Transaction) *IndexManager {
+func NewIndexManager(isNew bool, tableMgr TableManager, tx *tx.Transaction) IndexManager {
 	if isNew {
 		schema := record.NewSchema()
 		schema.AddStringField("indexName", MAX_NAME)
@@ -21,7 +21,7 @@ func NewIndexManager(isNew bool, tableMgr *TableManager, tx *tx.Transaction) *In
 	}
 
 	layout := tableMgr.GetLayout("idxCat", tx)
-	return &IndexManager{
+	return IndexManager{
 		layout:   layout,
 		tableMgr: tableMgr,
 	}

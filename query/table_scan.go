@@ -9,13 +9,13 @@ import (
 
 type TableScan struct {
 	tx          *tx.Transaction
-	layout      *record.Layout
+	layout      record.Layout
 	recordPage  *record.RecordPage
 	filename    string
 	currentSlot int
 }
 
-func NewTableScan(tx *tx.Transaction, tableName string, layout *record.Layout) *TableScan {
+func NewTableScan(tx *tx.Transaction, tableName string, layout record.Layout) *TableScan {
 	filename := fmt.Sprintf("%s.tbl", tableName)
 	tableScan := &TableScan{
 		tx:       tx,
@@ -105,14 +105,14 @@ func (tableScan *TableScan) Delete() {
 	tableScan.recordPage.Delete(tableScan.currentSlot)
 }
 
-func (tableScan *TableScan) GetRecord() *record.Record {
+func (tableScan *TableScan) GetRecord() record.Record {
 	return record.NewRecord(
 		tableScan.recordPage.Block().Number(),
 		tableScan.currentSlot,
 	)
 }
 
-func (tableScan *TableScan) MoveToRecord(rcd *record.Record) {
+func (tableScan *TableScan) MoveToRecord(rcd record.Record) {
 	tableScan.Close()
 	block := file.NewBlock(tableScan.filename, rcd.BlockNumber())
 
