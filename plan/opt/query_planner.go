@@ -1,4 +1,4 @@
-package basic
+package opt
 
 import (
 	"goodb/metadata"
@@ -7,17 +7,17 @@ import (
 	"goodb/tx"
 )
 
-type BasicQueryPlanner struct {
+type OptQueryPlanner struct {
 	metadataMgr *metadata.MetadataManager
 }
 
-func NewBasicQueryPlanner(metadataMgr *metadata.MetadataManager) plan.QueryPlanner {
-	return &BasicQueryPlanner{
+func NewOptQueryPlanner(metadataMgr *metadata.MetadataManager) plan.QueryPlanner {
+	return &OptQueryPlanner{
 		metadataMgr: metadataMgr,
 	}
 }
 
-func (planner *BasicQueryPlanner) CreatePlan(stmt parse.SelectStatement, tx *tx.Transaction) plan.Plan {
+func (planner *OptQueryPlanner) CreatePlan(stmt parse.SelectStatement, tx *tx.Transaction) plan.Plan {
 	var plans []plan.Plan
 	for _, tableName := range stmt.Tables {
 		tablePlan := plan.NewTablePlan(tx, tableName, planner.metadataMgr)

@@ -11,7 +11,7 @@ type BasicUpdatePlanner struct {
 	metadataMgr *metadata.MetadataManager
 }
 
-func NewBasicUpdatePlanner(metadataMgr *metadata.MetadataManager) *BasicUpdatePlanner {
+func NewBasicUpdatePlanner(metadataMgr *metadata.MetadataManager) plan.UpdatePlanner {
 	return &BasicUpdatePlanner{
 		metadataMgr: metadataMgr,
 	}

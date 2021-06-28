@@ -13,7 +13,7 @@ import (
 func TestTableScan(t *testing.T) {
 	os.RemoveAll(file.DB_DIR_PREFIX)
 
-	db := server.NewGooDb("test")
+	db := server.NewGooDbBasic("test")
 	tx := db.NewTx()
 
 	schema := record.NewSchema()

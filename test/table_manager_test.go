@@ -12,7 +12,7 @@ import (
 func TestTableManager(t *testing.T) {
 	os.RemoveAll(file.DB_DIR_PREFIX)
 
-	db := server.NewGooDb("test")
+	db := server.NewGooDbBasic("test")
 
 	tx := db.NewTx()
 	tm := metadata.NewTableManager(true, tx)

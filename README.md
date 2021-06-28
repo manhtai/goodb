@@ -7,17 +7,17 @@ goodb
 
 ## Supported commands
 
-```sql
+```sh
 CREATE TABLE
-    CREATE INDEX
-    INSERT
+CREATE INDEX
+INSERT
 SELECT
 DELETE
 ```
 
 ## Supported types
 
-```sql
+```sh
 INT
 VARCHAR(1-255)
 ```
