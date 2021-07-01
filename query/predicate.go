@@ -1,5 +1,7 @@
 package query
 
+import "goodb/record"
+
 type Predicate struct {
 	terms []Term
 }
@@ -15,4 +17,20 @@ func (pre *Predicate) IsSatisfied(s Scan) bool {
 		}
 	}
 	return true
+}
+
+func (pre *Predicate) EquatesWithConstant(name string) *Constant {
+	panic("Implement me")
+}
+
+func (pre *Predicate) EquatesWithField(name string) string {
+	panic("Implement me")
+}
+
+func (pre *Predicate) SelectSubPred(schema record.Schema) *Predicate {
+	panic("Implement me")
+}
+
+func (pre *Predicate) JoinSubPred(s record.Schema, schema record.Schema) *Predicate {
+	panic("Implement me")
 }

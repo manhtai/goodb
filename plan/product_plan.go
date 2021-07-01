@@ -30,3 +30,7 @@ func (pp *ProductPlan) Open() query.Scan {
 func (pp *ProductPlan) Schema() record.Schema {
 	return pp.schema
 }
+
+func (sp *ProductPlan) RecordsOutput() int {
+	return 0
+}
