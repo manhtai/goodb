@@ -25,3 +25,7 @@ func (sp *SelectPlan) Open() query.Scan {
 func (sp *SelectPlan) Schema() record.Schema {
 	return sp.plan.Schema()
 }
+
+func (sp *SelectPlan) RecordsOutput() int {
+	return 0
+}

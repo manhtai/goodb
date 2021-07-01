@@ -29,3 +29,7 @@ func (pp *ProjectPlan) Open() query.Scan {
 func (pp *ProjectPlan) Schema() record.Schema {
 	return pp.schema
 }
+
+func (pp *ProjectPlan) RecordsOutput() int {
+	return 0
+}

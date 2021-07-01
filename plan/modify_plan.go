@@ -29,3 +29,7 @@ func (sp *ModifyPlan) OpenToUpdate() query.UpdateScan {
 func (sp *ModifyPlan) Schema() record.Schema {
 	return sp.plan.Schema()
 }
+
+func (sp *ModifyPlan) RecordsOutput() int {
+	return 0
+}

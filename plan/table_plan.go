@@ -33,3 +33,7 @@ func (tp TablePlan) Open() query.Scan {
 func (tp TablePlan) Schema() record.Schema {
 	return *tp.layout.Schema()
 }
+
+func (tp TablePlan) RecordsOutput() int {
+	return 0
+}

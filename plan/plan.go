@@ -8,6 +8,7 @@ import (
 type Plan interface {
 	Open() query.Scan
 	Schema() record.Schema
+	RecordsOutput() int
 }
 
 type UpdatePlan interface {
